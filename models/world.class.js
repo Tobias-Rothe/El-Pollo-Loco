@@ -25,36 +25,25 @@ class World {
 
     draw(){
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-      
         this.addObjectsToMap(this.backgrounds);
         this.addObjectsToMap(this.clouds);
         this.addObjectsToMap(this.enemies);
         this.addToMap(this.character);
-
-       
-
-
-      
         //draw wird immer wieder aufgerufen
         let self = this;
         requestAnimationFrame(function(){
             self.draw();
-        });
-        
+        });  
     };
     addToMap(mo) {
         this.ctx.drawImage(mo.img, mo.x, mo.y, mo.width, mo.height);  
-  }
+  };
     addObjectsToMap(objects){
         objects.forEach(o => {
-            this.addToMap(o);
-            
-            
+            this.addToMap(o);    
         });
     }
-
-   
-}
+};
 
 
 
