@@ -15,7 +15,9 @@ class MovableObject{
         
         
     }
-    
+    /** 
+    *@param {Array} array-
+    */
     loadImages(array){
         array.forEach(path => { 
             let img =new Image();
@@ -23,6 +25,8 @@ class MovableObject{
             this.ImageCache[path] = img;
         });
     }
+
+   
      moveRight() {
         console.log("Moving Right");
         
@@ -31,5 +35,14 @@ class MovableObject{
         setInterval(() => {
             this.x -= this.speed;  
         }, 1000 / 60);
+    }
+
+    playAnimation(images){
+        let i =  this. currentImage % images.length; //let i =  0 % 6 ;  0, rest 0 
+        // i = 0,1,2,3,4,5,0,1,2,3....
+        let path = images[i];
+        this.img = this.ImageCache[path];
+        this. currentImage++;
+
     }
 }
