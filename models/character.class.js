@@ -1,8 +1,9 @@
 class Character extends MovableObject{
 
-height =250
-width = 150
-y= 180
+height =250;
+width = 150;
+y= 180;
+speed = 5;
 IMAGES_WALKING =[
     '../img/2_character_pepe/2_walk/W-21.png',
     '../img/2_character_pepe/2_walk/W-22.png',
@@ -12,6 +13,7 @@ IMAGES_WALKING =[
     '../img/2_character_pepe/2_walk/W-26.png'
 
 ];
+world;
 
 
 constructor(){
@@ -23,14 +25,31 @@ constructor(){
     animate(){
 
         setInterval(() => {
-            let i =  this. currentImage % this.IMAGES_WALKING.length; //let i =  0 % 6 ;  0, rest 0 
-            // i = 0,1,2,3,4,5,0,1,2,3....
-            let path = this.IMAGES_WALKING[i];
-            this.img = this.ImageCache[path];
-            this. currentImage++;
-        }, 100  );
+            if(this.world.keyboard.RIGHT){
+                this.x += this.speed
+                this.otherDirection = false;
+            }
+            if(this.world.keyboard.LEFT){
+                this.x -= this.speed;
+                this.otherDirection = true;
+            }
+        }, 1000 / 60);
+     
+            setInterval(() => {
 
-    }
+                if(this.world.keyboard.RIGHT || this.world.keyboard.LEFT){
+                  
+                //walk animation
+                let i =  this. currentImage % this.IMAGES_WALKING.length; //let i =  0 % 6 ;  0, rest 0 
+                // i = 0,1,2,3,4,5,0,1,2,3....
+                let path = this.IMAGES_WALKING[i];
+                this.img = this.ImageCache[path];
+                this. currentImage++;
+                }
+            }, 30   );
+        }
+        
+    
 
 
     jump() {
