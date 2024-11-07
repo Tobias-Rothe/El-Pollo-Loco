@@ -1,80 +1,66 @@
-class MovableObject{
-    x = 120 ;
-    y = 230;
-    img;
-    height = 200;
-    width = 100;
-    ImageCache={};
-    currentImage = 0;
-    speed =0.2;
-    otherDirection = false;
-    speedY=0;
-    acceleration=2.5;
+class MovableObject extends DrawableObject {
+  speed = 0.2;
+  otherDirection = false;
+  speedY = 0;
+  acceleration = 2.5;
+  energy = 100;
+  lastHit = 0;
 
-
-applayGravaty(){
+  applayGravaty() {
     setInterval(() => {
-        if(this.isAboveGround()|| this.speedY > 0){
-            this.y -= this.speedY;
-            this.speedY -= this.acceleration
-        }
-            
-    }, 1000 / 25 );
-}
-isAboveGround(){
+      if (this.isAboveGround() || this.speedY > 0) {
+        this.y -= this.speedY;
+        this.speedY -= this.acceleration;
+      }
+    }, 1000 / 25);
+  }
+  isAboveGround() {
     return this.y < 180;
-}
-    loadImage(path){
-        this.img = new Image();
-        this.img.src = path;   
-        
-        
-    }
-    /** 
-    *@param {Array} array-
-    */
-    loadImages(array){
-        array.forEach(path => { 
-            let img =new Image();
-            img.src = path;
-            this.ImageCache[path] = img;
-        });
-    }
-    draw(ctx){
-        ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
+  }
 
+  isColliding(mo) {
+    return (
+      this.x + this.width > mo.x &&
+      this.y + this.height > mo.y &&
+      this.x < mo.x &&
+      this.y < mo.y + mo.height
+    );
+  }
+  hit() {
+    this.energy -= 5;
+    if (this.energy < 0) {
+      this.energy = 0;
+    } else {
+      this.lastHit = new Date().getTime();
     }
-    drawFrame(ctx){
-         ctx.beginPath();
-        ctx.lineWidth = "5";
-        ctx.strokeStyle = "blue";
-        ctx.rect(this.x, this.y, this.width, this.height);
-        ctx.stroke();
+  }
 
-    }
-    
+  isHurt() {
+    let timepassed = new Date().getTime() - this.lastHit;
+    timepassed = timepassed / 1000;
 
-   
-     moveRight() {
-        this.x += this.speed
-       
-         this.walking_sound.play();
-        console.log("Moving Right");
-        
-    }
-    moveLeft(){
-        this.x -= this.speed;
-      
-       
-    }
+    return timepassed < 1;
+  }
 
-    playAnimation(images){
-        let i =  this. currentImage % images.length; //let i =  0 % 6 ;  0, rest 0 
-        // i = 0,1,2,3,4,5,0,1,2,3....
-        let path = images[i];
-        this.img = this.ImageCache[path];
-        this. currentImage++;
+  isDead() {
+    return this.energy == 0;
+  }
 
-    }
-    
+  moveRight() {
+    this.x += this.speed;
+
+    this.walking_sound.play();
+  }
+
+  moveLeft() {
+    this.x -= this.speed;
+  }
+
+  playAnimation(images) {
+    let i = this.currentImage % images.length; //let i =  0 % 6 ;  0, rest 0
+    // i = 0,1,2,3,4,5,0,1,2,3....
+    let path = images[i];
+    this.img = this.ImageCache[path];
+    this.currentImage++;
+  }
 }
