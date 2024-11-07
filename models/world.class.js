@@ -6,6 +6,9 @@ class World {
   keyboard;
   camera_x = 0;
   statusBar = new StatusBar();
+  coinStatusBar = new StatusBarCoins();
+  bottleStatusBar = new StatusBarBottle();
+  throwableObjects = [new ThrowableObject()];
 
   constructor(canvas, keyboard) {
     this.ctx = canvas.getContext("2d");
@@ -25,7 +28,7 @@ class World {
       this.level.enemies.forEach((enemy) => {
         if (this.character.isColliding(enemy)) {
           this.character.hit();
-          console.log("hitmarker", this.character.energy);
+          this.statusBar.setPercentages(this.character.energy);
         }
       });
     }, 200);
@@ -35,10 +38,15 @@ class World {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.ctx.translate(this.camera_x, 0);
     this.addObjectsToMap(this.level.backgrounds);
-    this.addToMap(this.statusBar);
-    this.addToMap(this.character);
     this.addObjectsToMap(this.level.clouds);
+    this.ctx.translate(-this.camera_x, 0);
+    this.addToMap(this.bottleStatusBar);
+    this.addToMap(this.statusBar);
+    this.addToMap(this.coinStatusBar);
+    this.ctx.translate(this.camera_x, 0);
+    this.addToMap(this.character);
     this.addObjectsToMap(this.level.enemies);
+    this.addObjectsToMap(this.throwableObjects);
     this.ctx.translate(-this.camera_x, 0);
     //draw wird immer wieder aufgerufen
     let self = this;
