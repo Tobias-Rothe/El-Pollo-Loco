@@ -7,8 +7,8 @@ class StatusBarCoins extends DrawableObject {
     "img/7_statusbars/1_statusbar/1_statusbar_coin/orange/80.png",
     "img/7_statusbars/1_statusbar/1_statusbar_coin/orange/100.png",
   ];
+  coinsCollected = 0;
 
-  percentage = 100;
   constructor() {
     super();
 
@@ -17,25 +17,24 @@ class StatusBarCoins extends DrawableObject {
     this.y = 90;
     this.height = 60;
     this.width = 150;
-    this.setPercentages(100);
+    this.setCoins(0);
   }
 
-  setPercentages(percentage) {
-    this.percentage = percentage;
+  setCoins(coins) {
+    this.coinsCollected = coins;
     let path = this.IMAGES[this.resolveImageIndex()];
     this.img = this.ImageCache[path];
-    console.log(path);
   }
   resolveImageIndex() {
-    if (this.percentage == 100) {
+    if (this.coinsCollected >= 5) {
       return 5;
-    } else if (this.percentage > 80) {
+    } else if (this.coinsCollected >= 4) {
       return 4;
-    } else if (this.percentage > 60) {
+    } else if (this.coinsCollected >= 3) {
       return 3;
-    } else if (this.percentage > 40) {
+    } else if (this.coinsCollected >= 2) {
       return 2;
-    } else if (this.percentage > 20) {
+    } else if (this.coinsCollected >= 1) {
       return 1;
     } else {
       return 0;

@@ -3,6 +3,7 @@ class Character extends MovableObject {
   width = 150;
   y = 80;
   speed = 5;
+  speedY = 0;
   IMAGES_WALKING = [
     "../img/2_character_pepe/2_walk/W-21.png",
     "../img/2_character_pepe/2_walk/W-22.png",
@@ -23,6 +24,7 @@ class Character extends MovableObject {
     "img/2_character_pepe/3_jump/J-38.png",
     "img/2_character_pepe/3_jump/J-39.png",
   ];
+
   IMAGES_DEAD = [
     "../img/2_character_pepe/5_dead/D-51.png",
     "../img/2_character_pepe/5_dead/D-52.png",
@@ -32,11 +34,13 @@ class Character extends MovableObject {
     "../img/2_character_pepe/5_dead/D-56.png",
     "../img/2_character_pepe/5_dead/D-57.png",
   ];
+
   IMAGES_HURT = [
     "../img/2_character_pepe/4_hurt/H-41.png",
     "../img/2_character_pepe/4_hurt/H-42.png",
     "../img/2_character_pepe/4_hurt/H-43.png",
   ];
+
   world;
   walking_sound = new Audio("../audio/walk.mp3");
   jumping_sound = new Audio("audio/jump.mp3");
@@ -72,7 +76,7 @@ class Character extends MovableObject {
     }, 1000 / 60);
 
     setInterval(() => {
-      if (this.isDead()) {
+      if (this.isDead) {
         this.playAnimation(this.IMAGES_DEAD);
       } else if (this.isHurt()) {
         this.playAnimation(this.IMAGES_HURT);
@@ -83,11 +87,39 @@ class Character extends MovableObject {
           this.playAnimation(this.IMAGES_WALKING);
         }
       }
-    }, 30);
+    }, 100);
   }
 
   jump() {
+    if (this.isAboveGround()) return;
     this.speedY = 30;
     this.jumping_sound.play();
+    console.log("Springe! speedY:", this.speedY);
+    this.checkJumpingOnEnemies();
+  }
+
+  checkJumpingOnEnemies() {
+    this.world.level.enemies.forEach((enemy) => {
+      if (this.isColliding(enemy) && this.speedY > 0) {
+        const characterBottom = this.y + this.height;
+        const enemyTop = enemy.y;
+        const enemyBottom = enemy.y + enemy.height;
+
+        console.log(`Character Position: x: ${this.x}, y: ${this.y}`);
+        console.log(`Enemy Position: x: ${enemy.x}, y: ${enemy.y}`);
+        console.log(`Character Bottom: ${characterBottom}, Enemy Top: ${enemyTop}`);
+        if (
+          characterBottom > enemyTop &&
+          this.y + this.height - 15 < enemyBottom &&
+          Math.abs(this.x - enemy.x) < 100 &&
+          this.x + this.width > enemy.x &&
+          this.x < enemy.x + enemy.width
+        ) {
+          console.log("Gegner durch Seitensprung getötet!");
+          enemy.die();
+          this.speedY = 10;
+        }
+      }
+    });
   }
 }
