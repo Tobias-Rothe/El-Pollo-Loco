@@ -1,9 +1,9 @@
 class Character extends MovableObject {
   height = 250;
-  width = 150;
+  width = 100;
   y = 80;
   speed = 5;
-  speedY = 0;
+  speedY = 1;
   IMAGES_WALKING = [
     "../img/2_character_pepe/2_walk/W-21.png",
     "../img/2_character_pepe/2_walk/W-22.png",
@@ -91,33 +91,30 @@ class Character extends MovableObject {
   }
 
   jump() {
-    if (this.isAboveGround()) return;
-    this.speedY = 30;
-    this.jumping_sound.play();
-    console.log("Springe! speedY:", this.speedY);
-    this.checkJumpingOnEnemies();
+    if (!this.isAboveGround()) {
+      // Der Charakter kann nur springen, wenn er den Boden berührt
+      this.speedY = 30; // Setze die Sprunggeschwindigkeit
+      this.jumping_sound.play(); // Spiele den Sprungsound
+      console.log("Springe mit speedY:", this.speedY); // Überprüfe den Wert von speedY
+    }
   }
 
   checkJumpingOnEnemies() {
     this.world.level.enemies.forEach((enemy) => {
-      if (this.isColliding(enemy) && this.speedY > 0) {
+      if (this.speedY > 0) {
+        // Nur wenn der Charakter nach unten fällt
         const characterBottom = this.y + this.height;
         const enemyTop = enemy.y;
         const enemyBottom = enemy.y + enemy.height;
 
-        console.log(`Character Position: x: ${this.x}, y: ${this.y}`);
-        console.log(`Enemy Position: x: ${enemy.x}, y: ${enemy.y}`);
-        console.log(`Character Bottom: ${characterBottom}, Enemy Top: ${enemyTop}`);
-        if (
-          characterBottom > enemyTop &&
-          this.y + this.height - 15 < enemyBottom &&
-          Math.abs(this.x - enemy.x) < 100 &&
-          this.x + this.width > enemy.x &&
-          this.x < enemy.x + enemy.width
-        ) {
-          console.log("Gegner durch Seitensprung getötet!");
-          enemy.die();
-          this.speedY = 10;
+        // Überprüfe, ob der Charakter sich in einem Bereich über dem Gegner befindet und nach unten fällt
+        const isAboveEnemy = characterBottom - 10 < enemyTop; // Über dem Gegner
+        const isCloseEnoughHorizontal = Math.abs(this.x - enemy.x) < 75; // Horizontale Nähe
+
+        if (isAboveEnemy && isCloseEnoughHorizontal && this.speedY > 0) {
+          console.log("Gegner durch Sprung von oben getötet!");
+          enemy.die(); // Gegner wird getötet
+          this.speedY = -10; // Rückstoß nach oben
         }
       }
     });

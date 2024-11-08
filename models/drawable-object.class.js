@@ -4,9 +4,9 @@ class DrawableObject {
   currentImage = 0;
   x = 120;
   y = 230;
-  img;
-  height = 200;
-  width = 100;
+
+  height = 10;
+  width = 10;
 
   loadImage(path) {
     this.img = new Image();

@@ -49,18 +49,25 @@ class World {
 
   checkEnemyCollisions() {
     this.level.enemies.forEach((enemy) => {
-      if (this.character.isAboveGround() && this.character.isColliding(enemy) && !enemy.isDead) {
-        if (this.character.y + this.character.height - 15 < enemy.y && this.character.speedY > 0) {
-          console.log("Gegner durch Sprung getötet!");
-          enemy.die();
-          this.character.jump();
-        }
-      }
+      // Prüfen, ob der Charakter und das Huhn kollidieren
+      if (this.character.isColliding(enemy) && !enemy.isDead) {
+        const characterBottom = this.character.y + this.character.height;
+        const enemyTop = enemy.y;
 
-      if (!enemy.isDead && this.character.isColliding(enemy)) {
-        console.log("Der Charakter wurde vom Gegner getroffen!");
-        this.character.hit();
-        this.statusBar.setPercentages(this.character.energy);
+        // Bedingung: Charakter trifft auf das Huhn von oben, während er nach unten fällt
+        const characterAboveEnemy = characterBottom - 20 < enemyTop; // Erhöhe den Wert für mehr Flexibilität
+        const isFalling = this.character.speedY < 0;
+
+        if (characterAboveEnemy && isFalling) {
+          console.log("Gegner durch Sprung von oben getötet!");
+          enemy.die();
+          this.character.speedY = 15; // Leichter Rückstoß nach oben
+        } else {
+          // Falls die Kollision nicht von oben erfolgte (also seitlich oder unten)
+          console.log("Der Charakter wurde vom Gegner getroffen!");
+          this.character.hit();
+          this.statusBar.setPercentages(this.character.energy);
+        }
       }
     });
   }
@@ -99,20 +106,24 @@ class World {
 
   draw() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    this.ctx.translate(this.camera_x, 0);
+    this.ctx.save(); // Speichern des aktuellen Kontextes
+
+    this.ctx.translate(this.camera_x, 0); // Kamera verschieben
     this.addObjectsToMap(this.level.backgrounds);
     this.addObjectsToMap(this.level.clouds);
-    this.ctx.translate(-this.camera_x, 0);
-    this.addToMap(this.bottleStatusBar);
-    this.addToMap(this.statusBar);
-    this.addToMap(this.coinStatusBar);
-    this.ctx.translate(this.camera_x, 0);
-    this.addToMap(this.character);
     this.addObjectsToMap(this.level.enemies);
+    this.addToMap(this.character);
     this.addObjectsToMap(this.throwableObjects);
     this.addObjectsToMap(this.level.bottles);
     this.addObjectsToMap(this.level.coins);
-    this.ctx.translate(-this.camera_x, 0);
+
+    this.ctx.restore(); // Zurücksetzen des Kontextes
+
+    // Statusleisten müssen nicht übersetzt werden
+    this.addToMap(this.statusBar);
+    this.addToMap(this.coinStatusBar);
+    this.addToMap(this.bottleStatusBar);
+
     let self = this;
     requestAnimationFrame(function () {
       self.draw();

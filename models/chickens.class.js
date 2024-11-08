@@ -2,6 +2,7 @@ class Chicken extends MovableObject {
   height = 70;
   width = 70;
   y = 360;
+  CHICKEN_SOUND = new Audio("../audio/chicken.mp3");
 
   IMAGES_WALKING = [
     "../img/3_enemies_chicken/chicken_normal/1_walk/1_w.png",
@@ -37,6 +38,8 @@ class Chicken extends MovableObject {
   die() {
     this.isDead = true;
     this.speed = 0;
+    this.loadImage("../img/3_enemies_chicken/chicken_normal/2_dead/dead.png");
+    this.CHICKEN_SOUND.play();
     console.log("Das Huhn ist tot!");
   }
 }
