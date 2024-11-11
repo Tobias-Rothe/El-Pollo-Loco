@@ -1,5 +1,16 @@
 const level1 = new Level(
-  [new Chicken(), new Chicken(), new Chicken(), new Endboss()],
+  [
+    new Chicken(),
+    new Chicken(),
+    new Chicken(),
+    new Chicken(),
+    new Chicken(),
+    new Chicken(),
+    new Chicken(),
+    new Chicken(),
+    new Chicken(),
+    new Endboss(),
+  ],
   [new Cloud(), new Cloud(), new Cloud(), new Cloud(), new Cloud()],
   [
     new Background("../img/5_background/layers/air.png", -719),
@@ -38,6 +49,6 @@ const level1 = new Level(
     new Background("../img/5_background/layers/1_first_layer/2.png", 719 * 5),
   ],
   20, // Anzahl der Coins
-  10, // Anzahl der Bottles
+  5, // Anzahl der Bottles
   [new ThrowableObject()]
 );

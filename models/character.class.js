@@ -92,29 +92,26 @@ class Character extends MovableObject {
 
   jump() {
     if (!this.isAboveGround()) {
-      // Der Charakter kann nur springen, wenn er den Boden berührt
-      this.speedY = 30; // Setze die Sprunggeschwindigkeit
-      this.jumping_sound.play(); // Spiele den Sprungsound
-      console.log("Springe mit speedY:", this.speedY); // Überprüfe den Wert von speedY
+      this.speedY = 30;
+      this.jumping_sound.play();
+      console.log("Springe mit speedY:", this.speedY);
     }
   }
 
   checkJumpingOnEnemies() {
     this.world.level.enemies.forEach((enemy) => {
       if (this.speedY > 0) {
-        // Nur wenn der Charakter nach unten fällt
         const characterBottom = this.y + this.height;
         const enemyTop = enemy.y;
         const enemyBottom = enemy.y + enemy.height;
 
-        // Überprüfe, ob der Charakter sich in einem Bereich über dem Gegner befindet und nach unten fällt
-        const isAboveEnemy = characterBottom - 10 < enemyTop; // Über dem Gegner
-        const isCloseEnoughHorizontal = Math.abs(this.x - enemy.x) < 75; // Horizontale Nähe
+        const isAboveEnemy = characterBottom - 10 < enemyTop;
+        const isCloseEnoughHorizontal = Math.abs(this.x - enemy.x) < 75;
 
         if (isAboveEnemy && isCloseEnoughHorizontal && this.speedY > 0) {
           console.log("Gegner durch Sprung von oben getötet!");
-          enemy.die(); // Gegner wird getötet
-          this.speedY = -10; // Rückstoß nach oben
+          enemy.die();
+          this.speedY = -10;
         }
       }
     });

@@ -33,7 +33,12 @@ class World {
       this.collectCoins();
       this.collectBottles();
       this.checkBottleCollisions();
+      this.removeDeadEnemies(); // Neu: Entfernt besiegte Feinde
     }, 100);
+  }
+
+  removeDeadEnemies() {
+    this.level.enemies = this.level.enemies.filter((enemy) => !enemy.isDead);
   }
 
   checkThrowObjects() {
@@ -96,19 +101,27 @@ class World {
     this.throwableObjects.forEach((bottle, bottleIndex) => {
       this.level.enemies.forEach((enemy) => {
         if (bottle.isColliding(enemy) && !enemy.isDead) {
-          console.log("Gegner durch Flasche getroffen!");
-          enemy.die();
-          this.throwableObjects.splice(bottleIndex, 1);
+          console.log("Endboss durch Flasche getroffen!");
+          enemy.hit(); // Energie wird um 20 reduziert
+          this.throwableObjects.splice(bottleIndex, 1); // Entfernt die Flasche nach dem Treffer
         }
       });
     });
   }
 
+  isCharacterNearEndboss() {
+    const endboss = this.level.enemies.find((enemy) => enemy instanceof Endboss);
+    if (endboss) {
+      return Math.abs(this.character.x - endboss.x) < 500; // 500px Entfernung
+    }
+    return false;
+  }
+
   draw() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    this.ctx.save(); // Speichern des aktuellen Kontextes
+    this.ctx.save();
 
-    this.ctx.translate(this.camera_x, 0); // Kamera verschieben
+    this.ctx.translate(this.camera_x, 0);
     this.addObjectsToMap(this.level.backgrounds);
     this.addObjectsToMap(this.level.clouds);
     this.addObjectsToMap(this.level.enemies);
@@ -117,9 +130,14 @@ class World {
     this.addObjectsToMap(this.level.bottles);
     this.addObjectsToMap(this.level.coins);
 
-    this.ctx.restore(); // Zurücksetzen des Kontextes
+    // Endboss Statusleiste nur anzeigen, wenn der Charakter nah genug ist
+    const endboss = this.level.enemies.find((enemy) => enemy instanceof Endboss);
+    if (endboss && this.isCharacterNearEndboss()) {
+      endboss.drawStatusBar(this.ctx);
+    }
 
-    // Statusleisten müssen nicht übersetzt werden
+    this.ctx.restore();
+
     this.addToMap(this.statusBar);
     this.addToMap(this.coinStatusBar);
     this.addToMap(this.bottleStatusBar);
