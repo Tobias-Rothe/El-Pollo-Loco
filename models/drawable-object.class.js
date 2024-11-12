@@ -15,10 +15,11 @@ class DrawableObject {
   draw(ctx) {
     try {
       ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
-    } catch {
-      console.log(this.img.src);
+    } catch (error) {
+      console.error(`Fehler beim Zeichnen des Bildes: ${this.img?.src}`, error);
     }
   }
+
   drawFrame(ctx) {
     if (this instanceof Character || this instanceof Chicken || this instanceof Endboss) {
       ctx.beginPath();

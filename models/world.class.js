@@ -17,6 +17,8 @@ class World {
     this.canvas = canvas;
     this.keyboard = keyboard;
     this.draw();
+    this.character.energy = 100;
+    this.character.isDead = false;
 
     this.setWorld();
     this.run();
@@ -33,7 +35,8 @@ class World {
       this.collectCoins();
       this.collectBottles();
       this.checkBottleCollisions();
-      this.removeDeadEnemies(); // Neu: Entfernt besiegte Feinde
+      this.removeDeadEnemies();
+      this.checkGameOver();
     }, 100);
   }
 
@@ -54,21 +57,18 @@ class World {
 
   checkEnemyCollisions() {
     this.level.enemies.forEach((enemy) => {
-      // Prüfen, ob der Charakter und das Huhn kollidieren
       if (this.character.isColliding(enemy) && !enemy.isDead) {
         const characterBottom = this.character.y + this.character.height;
         const enemyTop = enemy.y;
 
-        // Bedingung: Charakter trifft auf das Huhn von oben, während er nach unten fällt
-        const characterAboveEnemy = characterBottom - 20 < enemyTop; // Erhöhe den Wert für mehr Flexibilität
+        const characterAboveEnemy = characterBottom - 20 < enemyTop;
         const isFalling = this.character.speedY < 0;
 
         if (characterAboveEnemy && isFalling) {
           console.log("Gegner durch Sprung von oben getötet!");
           enemy.die();
-          this.character.speedY = 15; // Leichter Rückstoß nach oben
+          this.character.speedY = 15;
         } else {
-          // Falls die Kollision nicht von oben erfolgte (also seitlich oder unten)
           console.log("Der Charakter wurde vom Gegner getroffen!");
           this.character.hit();
           this.statusBar.setPercentages(this.character.energy);
@@ -97,13 +97,25 @@ class World {
     });
   }
 
+  checkGameOver() {
+    if (this.character.energy <= 0) {
+      this.character.isDead = true;
+    }
+
+    if (this.character.isDead) {
+      cancelAnimationFrame(this.animationFrameId);
+      document.getElementById("canvas").style.display = "none";
+      document.getElementById("game-over").style.display = "block";
+    }
+  }
+
   checkBottleCollisions() {
     this.throwableObjects.forEach((bottle, bottleIndex) => {
       this.level.enemies.forEach((enemy) => {
         if (bottle.isColliding(enemy) && !enemy.isDead) {
           console.log("Endboss durch Flasche getroffen!");
-          enemy.hit(); // Energie wird um 20 reduziert
-          this.throwableObjects.splice(bottleIndex, 1); // Entfernt die Flasche nach dem Treffer
+          enemy.hit();
+          this.throwableObjects.splice(bottleIndex, 1);
         }
       });
     });
@@ -112,7 +124,7 @@ class World {
   isCharacterNearEndboss() {
     const endboss = this.level.enemies.find((enemy) => enemy instanceof Endboss);
     if (endboss) {
-      return Math.abs(this.character.x - endboss.x) < 500; // 500px Entfernung
+      return Math.abs(this.character.x - endboss.x) < 500;
     }
     return false;
   }
@@ -130,7 +142,6 @@ class World {
     this.addObjectsToMap(this.level.bottles);
     this.addObjectsToMap(this.level.coins);
 
-    // Endboss Statusleiste nur anzeigen, wenn der Charakter nah genug ist
     const endboss = this.level.enemies.find((enemy) => enemy instanceof Endboss);
     if (endboss && this.isCharacterNearEndboss()) {
       endboss.drawStatusBar(this.ctx);

@@ -54,14 +54,20 @@ window.addEventListener("keyup", (e) => {
 
 function startGame() {
   document.getElementById("start-screen").style.display = "none";
-
-  document.getElementById("canvas").style.display = "block";
+  const canvas = document.getElementById("canvas");
+  canvas.style.display = "block";
   init();
 }
 
-function setCanvasSize() {
-  canvas.width = 100;
-  canvas.height = 100;
+function restartGame() {
+  location.reload();
+}
+
+function setCanvasSize(width, height) {
+  canvas.width = width;
+  canvas.height = height;
+  canvas.style.width = `${width}px`;
+  canvas.style.height = `${height}px`;
 }
 
 function toggleFullscreen() {
@@ -108,11 +114,6 @@ document.addEventListener("fullscreenchange", () => {
     setCanvasSize(720, 480);
   }
 });
-
-function setCanvasSize(width, height) {
-  canvas.width = width;
-  canvas.height = height;
-}
 
 document.addEventListener("fullscreenchange", () => {
   if (document.fullscreenElement) {
@@ -178,7 +179,7 @@ function showStartScreen() {
 
   const ctx = canvas.getContext("2d");
   const backgroundImage = new Image();
-  backgroundImage.src = "../img/9_intro_outro_screens/start/startscreen_2.png"; // Pfad zum Bild
+  backgroundImage.src = "../img/9_intro_outro_screens/start/startscreen_2.png";
 
   backgroundImage.onload = function () {
     ctx.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height);

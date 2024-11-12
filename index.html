@@ -29,19 +29,18 @@
     <script src="./js/game.js"></script>
   </head>
   <body>
-    <h1>El Pollo Loco</h1>
-    <body>
-      <div id="start-screen" class="overlay">
-        <div id="background-container"></div>
+    <div id="start-screen" class="overlay">
+      <div id="background-container"></div>
 
-        <h1>Willkommen zu El Pollo Loco</h1>
-        <button onclick="startGame()">Spiel starten</button>
-      </div>
+      <button class="btn" onclick="startGame()">Spiel starten</button>
+    </div>
+    <div id="game-over" style="display: none">
+      <button class="restart-btn" onclick="restartGame()">Restart Game</button>
+    </div>
 
-      <button id="fullscreen-btn" onclick="toggleFullscreen()">Vollbild</button>
-      <div id="canvas-container">
-        <canvas id="canvas" style="display: none"></canvas>
-      </div>
-    </body>
+    <div id="canvas-container">
+      <h1>El Pollo Loco</h1>
+      <canvas id="canvas" style="display: none"></canvas>
+    </div>
   </body>
 </html>
