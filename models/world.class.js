@@ -8,6 +8,7 @@ class World {
   statusBar = new StatusBar();
   coinStatusBar = new StatusBarCoins();
   bottleStatusBar = new StatusBarBottle();
+  isMuted = false;
 
   coins = this.level.coins;
   throwableObjects = [];
@@ -19,9 +20,17 @@ class World {
     this.draw();
     this.character.energy = 100;
     this.character.isDead = false;
+    this.isMuted = false;
 
     this.setWorld();
     this.run();
+  }
+  toggleMute() {
+    this.isMuted = !this.isMuted;
+    document.querySelectorAll("audio").forEach((audio) => {
+      audio.volume = this.isMuted ? 0 : 1;
+    });
+    console.log(`Sound is now ${this.isMuted ? "muted" : "unmuted"}`);
   }
 
   setWorld() {
