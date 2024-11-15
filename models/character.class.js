@@ -100,6 +100,10 @@ class Character extends MovableObject {
     }
   }
 
+  isMoving() {
+    return this.world.keyboard.RIGHT || this.world.keyboard.LEFT;
+  }
+
   checkJumpingOnEnemies() {
     this.world.level.enemies.forEach((enemy) => {
       if (this.speedY > 0) {
@@ -117,5 +121,11 @@ class Character extends MovableObject {
         }
       }
     });
+  }
+  checkCollision(enemy) {
+    if (this.isColliding(enemy)) {
+      this.health -= enemy.damage;
+      console.log(`Kollision! Schaden: ${enemy.damage}, Verbleibende Gesundheit: ${this.health}`);
+    }
   }
 }

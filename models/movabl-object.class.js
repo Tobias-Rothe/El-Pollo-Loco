@@ -71,10 +71,4 @@ class MovableObject extends DrawableObject {
     this.img = this.ImageCache[path];
     this.currentImage++;
   }
-  toggleMute() {
-    isMuted = !isMuted;
-    document.querySelectorAll("audio").forEach((audio) => {
-      audio.volume = isMuted ? 0 : 1;
-    });
-  }
 }

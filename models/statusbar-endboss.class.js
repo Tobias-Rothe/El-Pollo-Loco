@@ -13,11 +13,11 @@ class StatusBarEndboss extends DrawableObject {
   constructor() {
     super();
     this.loadImages(this.IMAGES);
-    this.x = 500; // Position der Statusleiste (kann angepasst werden)
+    this.x = 500;
     this.y = 20;
     this.width = 200;
     this.height = 60;
-    this.setPercentage(100); // Startet bei 100%
+    this.setPercentage(100);
   }
 
   setPercentage(percentage) {

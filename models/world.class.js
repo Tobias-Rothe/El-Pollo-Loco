@@ -25,13 +25,6 @@ class World {
     this.setWorld();
     this.run();
   }
-  toggleMute() {
-    this.isMuted = !this.isMuted;
-    document.querySelectorAll("audio").forEach((audio) => {
-      audio.volume = this.isMuted ? 0 : 1;
-    });
-    console.log(`Sound is now ${this.isMuted ? "muted" : "unmuted"}`);
-  }
 
   setWorld() {
     this.character.world = this;
@@ -65,25 +58,29 @@ class World {
   }
 
   checkEnemyCollisions() {
-    this.level.enemies.forEach((enemy) => {
-      if (this.character.isColliding(enemy) && !enemy.isDead) {
-        const characterBottom = this.character.y + this.character.height;
-        const enemyTop = enemy.y;
-
-        const characterAboveEnemy = characterBottom - 20 < enemyTop;
-        const isFalling = this.character.speedY < 0;
-
-        if (characterAboveEnemy && isFalling) {
-          console.log("Gegner durch Sprung von oben getötet!");
-          enemy.die();
-          this.character.speedY = 15;
-        } else {
-          console.log("Der Charakter wurde vom Gegner getroffen!");
-          this.character.hit();
-          this.statusBar.setPercentages(this.character.energy);
+    if (this.character && this.character.isColliding) {
+      this.level.enemies.forEach((enemy) => {
+        if (this.character.isColliding(enemy) && !enemy.isDead) {
+          if (enemy instanceof SmallChicken) {
+            this.character.isMoving()
+              ? (enemy.die(), console.log("SmallChicken getötet!"))
+              : ((this.character.energy -= enemy.damage || 5),
+                console.log("SmallChicken verursacht Schaden!"));
+            this.statusBar.setPercentages(this.character.energy);
+          } else {
+            const aboveEnemy = this.character.y + this.character.height - 20 < enemy.y;
+            if (aboveEnemy && this.character.speedY < 0) {
+              enemy.die();
+              this.character.speedY = 15;
+              console.log("Gegner von oben getötet!");
+            } else {
+              this.character.energy -= enemy.damage || 10;
+              this.statusBar.setPercentages(this.character.energy);
+            }
+          }
         }
-      }
-    });
+      });
+    }
   }
 
   collectCoins() {
