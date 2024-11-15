@@ -7,21 +7,30 @@ class MovableObject extends DrawableObject {
   lastHit = 0;
   isDead = false;
 
-  applayGravaty() {
+  applyGravity() {
     setInterval(() => {
-      if (this.isAboveGround() || this.speedY > 0) {
-        this.y -= this.speedY;
-        this.speedY -= this.acceleration;
+      if (this.y < 200 || this.speedY < 0) {
+        this.y += this.speedY;
+        this.speedY += this.acceleration;
+        if (this.speedY > 10) {
+          this.speedY = 10;
+        }
       }
-    }, 1000 / 25);
+
+      if (this.y >= 200) {
+        this.y = 200;
+        this.speedY = 0;
+      }
+    }, 1000 / 60);
   }
+
   isAboveGround() {
-    if (this instanceof ThrowableObject) {
-      return true;
-    } else return this.y < 180;
+    return this.y < 200;
   }
 
   isColliding(mo) {
+    const offsetX = 20;
+    const offsetY = 5;
     return (
       this.x + this.width > mo.x &&
       this.x < mo.x + mo.width &&
@@ -64,11 +73,13 @@ class MovableObject extends DrawableObject {
     this.x -= this.speed;
   }
 
-  playAnimation(images) {
-    let i = this.currentImage % images.length; //let i =  0 % 6 ;  0, rest 0
-    // i = 0,1,2,3,4,5,0,1,2,3....
-    let path = images[i];
-    this.img = this.ImageCache[path];
+  playAnimation(images, speedFactor = 7) {
+    if (this.currentImage % speedFactor === 0) {
+      // Bestimmt das aktuelle Bild basierend auf dem Animationsfortschritt
+      let i = Math.floor(this.currentImage / speedFactor) % images.length;
+      let path = images[i];
+      this.img = this.ImageCache[path];
+    }
     this.currentImage++;
   }
 }

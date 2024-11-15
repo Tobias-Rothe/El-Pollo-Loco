@@ -172,19 +172,14 @@ window.onload = function () {
 function showStartScreen() {
   const startScreen = document.getElementById("start-screen");
   const canvas = document.getElementById("canvas");
-
   canvas.style.display = "none";
-
   startScreen.style.display = "block";
-
   const ctx = canvas.getContext("2d");
   const backgroundImage = new Image();
   backgroundImage.src = "../img/9_intro_outro_screens/start/startscreen_2.png";
-
   backgroundImage.onload = function () {
     ctx.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height);
   };
-
   ctx.font = "30px Arial";
   ctx.fillStyle = "white";
   ctx.fillText("Willkommen zu El Pollo Loco!", 150, 100);

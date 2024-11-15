@@ -1,7 +1,7 @@
 class Character extends MovableObject {
   height = 250;
   width = 100;
-  y = 80;
+  y = 200;
   speed = 5;
   speedY = 1;
   IMAGES_WALKING = [
@@ -69,7 +69,8 @@ class Character extends MovableObject {
 
   world;
   walking_sound = new Audio("../audio/walk.mp3");
-  jumping_sound = new Audio("audio/jump.mp3");
+  jumping_sound = new Audio("../audio/jump.mp3");
+  die_sound = new Audio("../audio/male-death.mp3");
 
   constructor() {
     super().loadImage("../img/2_character_pepe/2_walk/W-21.png");
@@ -80,7 +81,7 @@ class Character extends MovableObject {
     this.loadImages(this.IMAGES_IDLE);
     this.loadImages(this.IMAGES_SLEEP);
 
-    this.applayGravaty();
+    this.applyGravity();
     this.energy = 100;
     this.isDead = false;
     this.animate();
@@ -104,19 +105,23 @@ class Character extends MovableObject {
         lastActionTime = Date.now();
       }
 
-      if (self.world.keyboard.SPACE && !self.isAboveGround()) {
+      if (self.world.keyboard.SPACE && self.y === 200) {
         self.jump();
         lastActionTime = Date.now();
-        n;
       }
 
       self.world.camera_x = -self.x + 100;
     }, 1000 / 60);
 
     setInterval(() => {
+      self.checkJumpingOnEnemies();
+    }, 100);
+
+    setInterval(() => {
       const idleTime = Date.now() - lastActionTime;
 
       if (self.isDead) {
+        self.die_sound.play();
         self.playAnimation(self.IMAGES_DEAD);
       } else if (self.isHurt()) {
         self.playAnimation(self.IMAGES_HURT);
@@ -129,14 +134,14 @@ class Character extends MovableObject {
       } else if (self.isMoving()) {
         self.playAnimation(self.IMAGES_WALKING);
       }
-    }, 100);
+    }, 200);
   }
 
   jump() {
-    if (!this.isAboveGround()) {
-      this.speedY = 30;
+    if (this.y === 200) {
+      console.log("Jump triggered!");
+      this.speedY = -30;
       this.jumping_sound.play();
-      console.log("Springe mit speedY:", this.speedY);
     }
   }
 
@@ -146,22 +151,20 @@ class Character extends MovableObject {
 
   checkJumpingOnEnemies() {
     this.world.level.enemies.forEach((enemy) => {
-      if (this.speedY > 0) {
-        const characterBottom = this.y + this.height;
-        const enemyTop = enemy.y;
-        const enemyBottom = enemy.y + enemy.height;
+      const characterBottom = this.y + this.height;
+      const enemyTop = enemy.y;
+      const enemyBottom = enemy.y + enemy.height;
+      const isAboveEnemy = characterBottom - 10 < enemyTop;
+      const isCloseEnoughHorizontal = Math.abs(this.x - enemy.x) < 75;
 
-        const isAboveEnemy = characterBottom - 10 < enemyTop;
-        const isCloseEnoughHorizontal = Math.abs(this.x - enemy.x) < 75;
-
-        if (isAboveEnemy && isCloseEnoughHorizontal && this.speedY > 0) {
-          console.log("Gegner durch Sprung von oben getötet!");
-          enemy.die();
-          this.speedY = -10;
-        }
+      if (isAboveEnemy && isCloseEnoughHorizontal) {
+        console.log("Gegner durch Sprung von oben getötet!");
+        enemy.die();
+        this.speedY = -10;
       }
     });
   }
+
   checkCollision(enemy) {
     if (this.isColliding(enemy)) {
       this.health -= enemy.damage;
