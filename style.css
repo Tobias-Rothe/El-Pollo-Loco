@@ -7,16 +7,29 @@ body {
   justify-content: center;
   height: 100vh;
   background-color: #f4f4f4;
+  overflow: hidden;
+}
+
+h1 {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 2em;
+  color: red;
+  z-index: 1001;
 }
 
 canvas {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   background-color: black;
-  width: 720px;
-  height: 480px;
-}
-canvas.fullscreen {
   width: 100%;
   height: 100%;
+  max-width: 720px;
+  max-height: 480px;
 }
 
 .overlay {
@@ -37,39 +50,36 @@ canvas.fullscreen {
   cursor: pointer;
   margin-top: 100px;
 }
-#start-screen {
+
+#start-screen,
+#gameOverScreen {
   position: absolute;
-  top: 0;
-  left: 0;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  max-width: 720px;
+  max-height: 480px;
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
   text-align: center;
   color: white;
-}
-#gameOverScreen {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.8);
-  color: white;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  font-size: 2em;
   z-index: 1000;
+}
 
+#start-screen {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+#gameOverScreen {
+  background-color: rgba(0, 0, 0, 0.8);
   background-image: url("../img/9_intro_outro_screens/start/gamerover-screen.png");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  font-size: 2em;
 }
 
 #background-container {

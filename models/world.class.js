@@ -9,6 +9,10 @@ class World {
   coinStatusBar = new StatusBarCoins();
   bottleStatusBar = new StatusBarBottle();
   isMuted = false;
+  background_sound = new Audio("../audio/background.mp3");
+  bottleCollect_sound = new Audio("../audio/bottle.mp3");
+  bottleThrow_sound = new Audio("../audio/glass-shatter.mp3");
+  collectCoins_sound = new Audio("../audio/coin.mp3");
 
   coins = this.level.coins;
   throwableObjects = [];
@@ -24,7 +28,46 @@ class World {
     this.character.world = this;
 
     this.setWorld();
+    this.playBackgroundSound();
     this.run();
+  }
+
+  playBackgroundSound() {
+    if (!this.isMuted) {
+      this.background_sound.loop = true;
+      this.background_sound.volume = 0.1;
+      this.background_sound.play();
+    }
+  }
+
+  getAllGameSounds() {
+    return [
+      this.character.walking_sound,
+      this.character.jumping_sound,
+      this.character.die_sound,
+      this.bottleCollect_sound,
+      this.bottleThrow_sound,
+      this.collectCoins_sound,
+      this.background_sound,
+      ...this.level.enemies
+        .filter((enemy) => enemy instanceof Chicken)
+        .map((chicken) => chicken.CHICKEN_SOUND),
+    ];
+  }
+
+  toggleMute() {
+    this.isMuted = !this.isMuted;
+
+    this.getAllGameSounds().forEach((sound) => {
+      if (sound) {
+        sound.muted = this.isMuted;
+        if (this.isMuted) {
+          sound.pause();
+        } else if (sound.loop || sound === this.background_sound) {
+          sound.play();
+        }
+      }
+    });
   }
 
   stopAllSounds() {
@@ -56,8 +99,10 @@ class World {
     this.throwableObjects = [];
     this.level.enemies.forEach((enemy) => {
       enemy.isDead = false;
+      if (enemy instanceof Chicken) {
+        enemy.CHICKEN_SOUND.muted = this.isMuted;
+      }
     });
-
     const gameOverScreen = document.getElementById("gameOverScreen");
     if (gameOverScreen) {
       gameOverScreen.style.display = "none";
@@ -67,6 +112,15 @@ class World {
       canvas.style.display = "block";
     }
     this.camera_x = 0;
+    this.getAllGameSounds().forEach((sound) => {
+      if (sound) {
+        sound.muted = this.isMuted;
+        sound.pause();
+        if (!this.isMuted && sound.loop) {
+          sound.play();
+        }
+      }
+    });
     this.run();
   }
 
@@ -84,17 +138,6 @@ class World {
 
   removeDeadEnemies() {
     this.level.enemies = this.level.enemies.filter((enemy) => !enemy.isDead);
-  }
-
-  checkThrowObjects() {
-    if (this.keyboard.D) {
-      if (this.bottleStatusBar.bottlesCollected > 0) {
-        let bottle = new ThrowableObject(this.character.x + 100, this.character.y + 100);
-        this.throwableObjects.push(bottle);
-        this.bottleStatusBar.setBottles(this.bottleStatusBar.bottlesCollected - 1);
-        console.log("Flasche geworfen!");
-      }
-    }
   }
 
   checkEnemyCollisions() {
@@ -127,6 +170,9 @@ class World {
     this.coins.forEach((coin, index) => {
       if (coin.isCollected(this.character)) {
         console.log(`Münze bei Index ${index} eingesammelt!`);
+        if (!this.isMuted) {
+          this.collectCoins_sound.play();
+        }
         this.coins.splice(index, 1);
         this.coinStatusBar.setCoins(this.coinStatusBar.coinsCollected + 1);
       }
@@ -137,6 +183,9 @@ class World {
     this.level.bottles.forEach((bottle, index) => {
       if (bottle.isCollected(this.character)) {
         console.log(`Flasche bei Index ${index} eingesammelt!`);
+        if (!this.isMuted) {
+          this.bottleCollect_sound.play();
+        }
         this.level.bottles.splice(index, 1);
         this.bottleStatusBar.setBottles(this.bottleStatusBar.bottlesCollected + 1);
       }
@@ -150,11 +199,25 @@ class World {
     }
   }
 
+  checkThrowObjects() {
+    if (this.keyboard.D) {
+      if (this.bottleStatusBar.bottlesCollected > 0) {
+        let bottle = new ThrowableObject(this.character.x + 100, this.character.y + 100);
+        this.throwableObjects.push(bottle);
+        this.bottleStatusBar.setBottles(this.bottleStatusBar.bottlesCollected - 1);
+        console.log("Flasche geworfen!");
+      }
+    }
+  }
+
   checkBottleCollisions() {
     this.throwableObjects.forEach((bottle, bottleIndex) => {
       this.level.enemies.forEach((enemy) => {
         if (bottle.isColliding(enemy) && !enemy.isDead) {
           console.log("Endboss durch Flasche getroffen!");
+          if (!this.isMuted) {
+            this.bottleThrow_sound.play();
+          }
           enemy.hit();
           this.throwableObjects.splice(bottleIndex, 1);
         }

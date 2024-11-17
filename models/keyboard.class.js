@@ -5,4 +5,5 @@ class KeyBoard {
   DOWN = false;
   SPACE = false;
   D = false;
+  M = false;
 }

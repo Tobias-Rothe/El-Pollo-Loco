@@ -29,6 +29,10 @@ window.addEventListener("keydown", (e) => {
   if (e.keyCode == 68) {
     Keyboard.D = true;
   }
+  if (e.keyCode == 77) {
+    Keyboard.M = true;
+    world.toggleMute();
+  }
 });
 
 window.addEventListener("keyup", (e) => {
@@ -49,6 +53,9 @@ window.addEventListener("keyup", (e) => {
   }
   if (e.keyCode == 68) {
     Keyboard.D = false;
+  }
+  if (e.keyCode == 77) {
+    Keyboard.M = false;
   }
 });
 
