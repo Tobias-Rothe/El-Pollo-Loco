@@ -68,9 +68,6 @@ class Character extends MovableObject {
   ];
 
   world;
-  walking_sound = new Audio("../audio/walk.mp3");
-  jumping_sound = new Audio("../audio/jump.mp3");
-  die_sound = new Audio("../audio/male-death.mp3");
 
   constructor() {
     super().loadImage("../img/2_character_pepe/2_walk/W-21.png");
@@ -84,6 +81,9 @@ class Character extends MovableObject {
     this.applyGravity();
     this.energy = 100;
     this.isDead = false;
+    this.walking_sound = new Audio("../audio/walk.mp3");
+    this.jumping_sound = new Audio("../audio/jump.mp3");
+    this.die_sound = new Audio("../audio/male-death.mp3");
     this.animate();
   }
 
@@ -91,7 +91,7 @@ class Character extends MovableObject {
     let lastActionTime = Date.now();
     let self = this;
 
-    setInterval(() => {
+    const movementInterval = setInterval(() => {
       self.walking_sound.pause();
 
       if (self.world.keyboard.RIGHT && self.x < self.world.level.level_end_x) {
@@ -111,6 +111,11 @@ class Character extends MovableObject {
       }
 
       self.world.camera_x = -self.x + 100;
+
+      if (self.isDead) {
+        clearInterval(movementInterval);
+        self.triggerGameOverScreen();
+      }
     }, 1000 / 60);
 
     setInterval(() => {
@@ -121,25 +126,34 @@ class Character extends MovableObject {
       const idleTime = Date.now() - lastActionTime;
 
       if (self.isDead) {
-        self.die_sound.play();
-        self.playAnimation(self.IMAGES_DEAD);
-      } else if (self.isHurt()) {
-        self.playAnimation(self.IMAGES_HURT);
+        self.playAnimation(self.IMAGES_DEAD, 10);
       } else if (self.isAboveGround()) {
-        self.playAnimation(self.IMAGES_JUMPING);
+        self.playAnimation(self.IMAGES_JUMPING, 50);
       } else if (idleTime >= 15000) {
-        self.playAnimation(self.IMAGES_SLEEP);
+        self.playAnimation(self.IMAGES_SLEEP, 100);
       } else if (!self.isMoving()) {
-        self.playAnimation(self.IMAGES_IDLE);
+        self.playAnimation(self.IMAGES_IDLE, 50);
       } else if (self.isMoving()) {
-        self.playAnimation(self.IMAGES_WALKING);
+        self.playAnimation(self.IMAGES_WALKING, 10);
       }
-    }, 200);
+    }, 1000 / 60);
+  }
+
+  triggerGameOverScreen() {
+    if (this.world) {
+      this.world.stopAllSounds();
+    }
+    this.die_sound.play();
+
+    setTimeout(() => {
+      if (this.world) {
+        this.world.checkGameOverDisplay();
+      }
+    }, 3000);
   }
 
   jump() {
     if (this.y === 200) {
-      console.log("Jump triggered!");
       this.speedY = -30;
       this.jumping_sound.play();
     }

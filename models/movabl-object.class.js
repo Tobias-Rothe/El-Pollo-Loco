@@ -73,13 +73,15 @@ class MovableObject extends DrawableObject {
     this.x -= this.speed;
   }
 
-  playAnimation(images, speedFactor = 7) {
-    if (this.currentImage % speedFactor === 0) {
-      // Bestimmt das aktuelle Bild basierend auf dem Animationsfortschritt
-      let i = Math.floor(this.currentImage / speedFactor) % images.length;
+  playAnimation(images, frameDelay = 100) {
+    // frameDelay in Millisekunden
+    const now = Date.now();
+    if (!this.lastFrameTime || now - this.lastFrameTime > frameDelay) {
+      let i = Math.floor(this.currentImage / images.length) % images.length;
       let path = images[i];
       this.img = this.ImageCache[path];
+      this.currentImage++;
+      this.lastFrameTime = now;
     }
-    this.currentImage++;
   }
 }

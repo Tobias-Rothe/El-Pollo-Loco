@@ -21,13 +21,53 @@ class World {
     this.character.energy = 100;
     this.character.isDead = false;
     this.isMuted = false;
+    this.character.world = this;
 
     this.setWorld();
     this.run();
   }
 
+  stopAllSounds() {
+    if (this.character.walking_sound) {
+      this.character.walking_sound.pause();
+    }
+    if (this.character.jumping_sound) {
+      this.character.jumping_sound.pause();
+    }
+    if (this.character.die_sound) {
+      this.character.die_sound.pause();
+    }
+  }
+
   setWorld() {
     this.character.world = this;
+  }
+
+  restartGame() {
+    this.character = new Character();
+    this.character.world = this;
+    this.character.energy = 100;
+    this.character.isDead = false;
+    this.statusBar.setPercentages(100);
+    this.coinStatusBar.setCoins(0);
+    this.bottleStatusBar.setBottles(0);
+    this.level = level1;
+    this.coins = this.level.coins;
+    this.throwableObjects = [];
+    this.level.enemies.forEach((enemy) => {
+      enemy.isDead = false;
+    });
+
+    const gameOverScreen = document.getElementById("gameOverScreen");
+    if (gameOverScreen) {
+      gameOverScreen.style.display = "none";
+    }
+    const canvas = document.getElementById("canvas");
+    if (canvas) {
+      canvas.style.display = "block";
+    }
+    this.camera_x = 0;
+    this.run();
   }
 
   run() {
@@ -104,14 +144,9 @@ class World {
   }
 
   checkGameOver() {
-    if (this.character.energy <= 0) {
+    if (this.character.energy <= 0 && !this.character.isDead) {
       this.character.isDead = true;
-    }
-
-    if (this.character.isDead) {
-      cancelAnimationFrame(this.animationFrameId);
-      document.getElementById("canvas").style.display = "none";
-      document.getElementById("game-over").style.display = "block";
+      this.character.triggerGameOverScreen();
     }
   }
 
@@ -125,6 +160,24 @@ class World {
         }
       });
     });
+  }
+
+  checkGameOverDisplay() {
+    if (this.character.isDead) {
+      cancelAnimationFrame(this.animationFrameId);
+      document.getElementById("canvas").style.display = "none";
+      const gameOverScreen = document.getElementById("gameOverScreen");
+      if (gameOverScreen) {
+        gameOverScreen.style.display = "flex";
+        const restartButton = document.getElementById("restartButton");
+        if (restartButton) {
+          restartButton.style.display = "block";
+          restartButton.addEventListener("click", () => {
+            this.restartGame();
+          });
+        }
+      }
+    }
   }
 
   isCharacterNearEndboss() {
@@ -147,18 +200,14 @@ class World {
     this.addObjectsToMap(this.throwableObjects);
     this.addObjectsToMap(this.level.bottles);
     this.addObjectsToMap(this.level.coins);
-
     const endboss = this.level.enemies.find((enemy) => enemy instanceof Endboss);
     if (endboss && this.isCharacterNearEndboss()) {
       endboss.drawStatusBar(this.ctx);
     }
-
     this.ctx.restore();
-
     this.addToMap(this.statusBar);
     this.addToMap(this.coinStatusBar);
     this.addToMap(this.bottleStatusBar);
-
     let self = this;
     requestAnimationFrame(function () {
       self.draw();

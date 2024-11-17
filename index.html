@@ -35,21 +35,13 @@
 
       <button class="btn" onclick="startGame()">Spiel starten</button>
     </div>
-    <div id="game-over" style="display: none">
-      <button class="restart-btn" onclick="restartGame()">Restart Game</button>
+    <div id="gameOverScreen" style="display: none">
+      <button id="restartButton" style="display: none">Restart Game</button>
     </div>
 
     <div id="canvas-container">
       <h1>El Pollo Loco</h1>
       <button onclick="world.toggleMute()">Stumm/Unmute</button>
-      <input
-        type="range"
-        min="0"
-        max="1"
-        step="0.01"
-        value="1"
-        onchange="world.setVolume(this.value)"
-      />
 
       <canvas id="canvas" style="display: none"> </canvas>
     </div>

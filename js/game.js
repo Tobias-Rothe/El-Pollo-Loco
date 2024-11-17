@@ -59,10 +59,6 @@ function startGame() {
   init();
 }
 
-function restartGame() {
-  location.reload();
-}
-
 function setCanvasSize(width, height) {
   canvas.width = width;
   canvas.height = height;
