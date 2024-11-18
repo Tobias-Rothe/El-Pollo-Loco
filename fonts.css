@@ -1,0 +1,7 @@
+@font-face {
+  font-family: mexican;
+  src: url(../assets/fonts/ELRIOTT2.TTF);
+}
+* {
+  font-family: mexican;
+}

@@ -19,8 +19,8 @@ h1 {
   top: 20px;
   left: 50%;
   transform: translateX(-50%);
-  font-size: 2em;
-  color: red;
+  font-size: 60px;
+  color: #ffc300;
   z-index: 1001;
 }
 
@@ -50,9 +50,13 @@ canvas {
 
 .overlay button {
   padding: 10px 20px;
-  font-size: 20px;
+  font-size: 30px;
   cursor: pointer;
-  margin-top: 100px;
+  margin-top: 50px;
+  border: none;
+  background-color: transparent;
+  color: #ffd50d;
+  font-weight: bold;
 }
 
 #start-screen,
@@ -99,8 +103,12 @@ canvas {
 }
 
 button {
-  font-size: 20px;
-  padding: 15px 30px;
-  margin-top: 20px;
+  padding: 10px 20px;
+  font-size: 30px;
   cursor: pointer;
+  margin-bottom: 350px;
+  border: none;
+  background-color: transparent;
+  color: #f65b49;
+  font-weight: bold;
 }
