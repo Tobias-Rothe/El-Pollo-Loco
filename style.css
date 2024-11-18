@@ -102,13 +102,58 @@ canvas {
   z-index: -1;
 }
 
-button {
+#controlButton {
+  position: absolute;
+  top: 17%;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #ffc300;
   padding: 10px 20px;
   font-size: 30px;
   cursor: pointer;
-  margin-bottom: 350px;
   border: none;
-  background-color: transparent;
-  color: #f65b49;
   font-weight: bold;
+  text-align: center;
+  border-radius: 8px;
+  background-color: transparent;
+  z-index: 1002;
+}
+#controlButton:hover {
+  color: black;
+  background-color: #ffc300;
+}
+h2 {
+  font-size: 60px;
+}
+
+#controlMenu {
+  position: absolute;
+  top: 33%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0, 0, 0, 0.9);
+  color: #ffc300;
+  border-radius: 8px;
+  padding: 20px;
+  z-index: 1001;
+  display: none;
+  font-size: 20px;
+}
+button:hover {
+  background-color: #ffd50d;
+  color: #000;
+}
+
+#controlMenu h2 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.control-menu ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.control-menu ul li {
+  margin: 10px 0;
 }

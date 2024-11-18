@@ -60,11 +60,34 @@ window.addEventListener("keyup", (e) => {
 });
 
 function startGame() {
+  // Starte das Spiel: Entferne den Startbildschirm
   document.getElementById("start-screen").style.display = "none";
+  document.getElementById("controlMenu").style.display = "none"; // Steuerung ausblenden
   const canvas = document.getElementById("canvas");
   canvas.style.display = "block";
+
   init();
 }
+
+document.addEventListener("DOMContentLoaded", function () {
+  const controlButton = document.getElementById("controlButton");
+  const controlMenu = document.getElementById("controlMenu");
+
+  // Setze das Steuerungsmenü auf 'ausgeblendet' zu Beginn
+  controlMenu.style.display = "none";
+
+  // Event Listener für den Button
+  if (controlButton) {
+    controlButton.addEventListener("click", function () {
+      // Toggle-Logik für das Steuerungsmenü
+      if (controlMenu.style.display === "none" || controlMenu.style.display === "") {
+        controlMenu.style.display = "block"; // Menü anzeigen
+      } else {
+        controlMenu.style.display = "none"; // Menü ausblenden
+      }
+    });
+  }
+});
 
 function setCanvasSize(width, height) {
   canvas.width = width;
