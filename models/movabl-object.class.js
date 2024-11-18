@@ -24,6 +24,13 @@ class MovableObject extends DrawableObject {
     }, 1000 / 60);
   }
 
+  reset() {
+    this.isDead = false;
+    this.x = this.startX; // Setze Position zurück
+    this.y = this.startY; // Setze Position zurück
+    // Weitere Eigenschaften zurücksetzen, falls notwendig
+  }
+
   isAboveGround() {
     return this.y < 200;
   }

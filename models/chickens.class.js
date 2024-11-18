@@ -18,6 +18,7 @@ class Chicken extends MovableObject {
     this.x = 200 + Math.random() * 3100;
     console.log(`Huhn Position - x: ${this.x}, y: ${this.y}`);
     this.speed = 0.2 + Math.random() * 0.25;
+
     this.animate();
   }
 

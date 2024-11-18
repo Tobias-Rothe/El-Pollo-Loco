@@ -87,45 +87,82 @@ class World {
   }
 
   restartGame() {
+    this.resetCharacterAndStatusBars();
+    this.resetLevelAndEnemies();
+    this.resetCanvasAndSounds();
+    this.updateDisplayElements();
+    this.restartProcesses();
+  }
+
+  resetCharacterAndStatusBars() {
     this.character = new Character();
-    this.character.world = this;
-    this.character.energy = 100;
-    this.character.isDead = false;
+    Object.assign(this.character, {
+      world: this,
+      energy: 100,
+      isDead: false,
+      x: 0,
+      y: 200,
+    });
+
     this.statusBar.setPercentages(100);
     this.coinStatusBar.setCoins(0);
     this.bottleStatusBar.setBottles(0);
-    this.level = level1;
-    this.coins = this.level.coins;
+
     this.throwableObjects = [];
-    this.level.enemies.forEach((enemy) => {
+  }
+
+  resetLevelAndEnemies() {
+    this.level.enemies = [];
+
+    for (let i = 0; i < 10; i++) {
+      this.level.enemies.push(new Chicken());
+    }
+
+    this.level.enemies.push(new SmallChicken());
+    this.level.enemies.push(new Endboss());
+  }
+
+  resetEnemy(enemy) {
+    if (enemy.isDead) {
       enemy.isDead = false;
-      if (enemy instanceof Chicken) {
-        enemy.CHICKEN_SOUND.muted = this.isMuted;
-      }
-    });
-    const gameOverScreen = document.getElementById("gameOverScreen");
-    if (gameOverScreen) {
-      gameOverScreen.style.display = "none";
+      enemy.x = enemy.startX;
+      enemy.y = enemy.startY;
     }
-    const canvas = document.getElementById("canvas");
-    if (canvas) {
-      canvas.style.display = "block";
-    }
+  }
+
+  resetCanvasAndSounds() {
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.camera_x = 0;
+
     this.getAllGameSounds().forEach((sound) => {
       if (sound) {
-        sound.muted = this.isMuted;
         sound.pause();
-        if (!this.isMuted && sound.loop) {
+        sound.currentTime = 0;
+        if (!this.isMuted && !sound.paused && sound.loop) {
           sound.play();
         }
       }
     });
+  }
+
+  updateDisplayElements() {
+    this.toggleElementDisplay("gameOverScreen", "none");
+    this.toggleElementDisplay("canvas", "block");
+  }
+
+  toggleElementDisplay(elementId, displayStyle) {
+    const element = document.getElementById(elementId);
+    if (element) element.style.display = displayStyle;
+  }
+
+  restartProcesses() {
+    cancelAnimationFrame(this.animationFrameId);
     this.run();
+    this.draw();
   }
 
   run() {
-    setInterval(() => {
+    this.intervalId = setInterval(() => {
       this.checkEnemyCollisions();
       this.checkThrowObjects();
       this.collectCoins();
@@ -137,7 +174,9 @@ class World {
   }
 
   removeDeadEnemies() {
+    console.log("Vor dem Entfernen von toten Gegnern:", this.level.enemies);
     this.level.enemies = this.level.enemies.filter((enemy) => !enemy.isDead);
+    console.log("Nach dem Entfernen von toten Gegnern:", this.level.enemies);
   }
 
   checkEnemyCollisions() {
