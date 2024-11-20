@@ -8,7 +8,7 @@ body {
   height: 100vh;
   overflow: hidden;
   position: relative;
-  background-image: url("../img/9_intro_outro_screens/start/Gemini_Generated_Image_bjf7zjbjf7zjbjf7.png");
+  background-image: url("./img/9_intro_outro_screens/start/Gemini_Generated_Image_bjf7zjbjf7zjbjf7.png");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -50,13 +50,14 @@ canvas {
 
 .overlay button {
   padding: 10px 20px;
-  font-size: 30px;
+  font-size: 40px;
   cursor: pointer;
-  margin-top: 50px;
+  margin-top: 1%;
   border: none;
   background-color: transparent;
   color: #ffd50d;
   font-weight: bold;
+  border-radius: 6px;
 }
 
 #start-screen,
@@ -83,7 +84,7 @@ canvas {
 
 #gameOverScreen {
   background-color: rgba(0, 0, 0, 0.8);
-  background-image: url("../img/9_intro_outro_screens/start/gamerover-screen.png");
+  background-image: url("./img/9_intro_outro_screens/start/gamerover-screen.png");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -96,7 +97,7 @@ canvas {
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: url("../img/9_intro_outro_screens/start/startscreen_2.png");
+  background-image: url("./img/9_intro_outro_screens/start/startscreen_2.png");
   background-size: cover;
   background-position: center;
   z-index: -1;
@@ -104,12 +105,12 @@ canvas {
 
 #controlButton {
   position: absolute;
-  top: 17%;
-  left: 50%;
+  top: 0%;
+  left: 92%;
   transform: translateX(-50%);
   color: #ffc300;
   padding: 10px 20px;
-  font-size: 30px;
+  font-size: 50px;
   cursor: pointer;
   border: none;
   font-weight: bold;
@@ -118,18 +119,20 @@ canvas {
   background-color: transparent;
   z-index: 1002;
 }
+
 #controlButton:hover {
   color: black;
   background-color: #ffc300;
 }
+
 h2 {
   font-size: 60px;
 }
 
 #controlMenu {
   position: absolute;
-  top: 33%;
-  left: 50%;
+  top: 55%;
+  left: 88%;
   transform: translate(-50%, -50%);
   background-color: rgba(0, 0, 0, 0.9);
   color: #ffc300;
@@ -139,6 +142,7 @@ h2 {
   display: none;
   font-size: 20px;
 }
+
 button:hover {
   background-color: #ffd50d;
   color: #000;
@@ -156,4 +160,186 @@ button:hover {
 
 .control-menu ul li {
   margin: 10px 0;
+}
+
+#game-over-screen,
+#win-screen {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: #ffd50d;
+  padding: 20px;
+  border-radius: 10px;
+  width: 100%;
+  max-width: 720px;
+  max-height: 580px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+#game-over-screen button,
+#win-screen button {
+  padding: 10px 20px;
+  font-size: 30px;
+  cursor: pointer;
+  margin-top: 50px;
+  border: none;
+  background-color: transparent;
+  color: #ffd50d;
+  font-weight: bold;
+}
+
+.win {
+  position: absolute;
+  top: -100px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 60px;
+  color: #ffc300;
+  z-index: 1001;
+}
+
+#orientation-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: #ffc300;
+  text-align: center;
+  z-index: 4010;
+  background-image: url(./img/9_intro_outro_screens/start/Gemini_Generated_Image_bjf7zjbjf7zjbjf7.png);
+  background-position: center;
+}
+
+.overlay-content h2 {
+  font-size: 24px;
+  margin: 20px;
+  padding: 20px;
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+#mobile-controls button {
+  display: none;
+}
+
+@media (max-width: 1025px) {
+  #mobile-controls {
+    position: absolute;
+    bottom: 0%;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 0%;
+    width: 80%;
+    justify-content: space-between;
+    z-index: 3000;
+    max-width: 400px;
+  }
+
+  #mobile-controls button {
+    background-color: #ffc300;
+    color: black;
+    border: none;
+    border-radius: 20px;
+    font-size: 25px;
+    width: 10%;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  h1 {
+    display: none;
+  }
+
+  #start-screen,
+  #gameOverScreen {
+    max-width: 100%;
+    max-height: 100%;
+    z-index: 4000;
+  }
+
+  #controlButton {
+    font-size: 40px;
+    top: 1%;
+    left: 92%;
+    z-index: 4001;
+  }
+
+  #controlMenu {
+    top: 61%;
+    left: 91%;
+    font-size: 20px;
+    padding: 1%;
+    z-index: 4002;
+  }
+}
+
+@media (max-width: 600px) {
+  #mobile-controls {
+    bottom: 5%;
+  }
+
+  #mobile-controls button {
+    font-size: 20px;
+    min-width: 40px;
+    min-height: 40px;
+  }
+
+  #controlButton {
+    font-size: 20px;
+  }
+
+  h1 {
+    font-size: 30px;
+    top: 1%;
+  }
+
+  #controlButton {
+    font-size: 15px;
+    top: 9%;
+  }
+  #start-screen,
+  #gameOverScreen {
+    max-width: 100%;
+    max-height: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  h1 {
+    font-size: 26px;
+    top: 1%;
+  }
+
+  #mobile-controls button {
+    font-size: 15px;
+  }
+
+  #controlButton {
+    font-size: 15px;
+    top: 9%;
+  }
+
+  #controlMenu {
+    font-size: 20px;
+  }
+
+  #start-screen,
+  #gameOverScreen {
+    max-width: 50%;
+    max-height: 50%;
+  }
 }

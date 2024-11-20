@@ -26,9 +26,8 @@ class MovableObject extends DrawableObject {
 
   reset() {
     this.isDead = false;
-    this.x = this.startX; // Setze Position zurück
-    this.y = this.startY; // Setze Position zurück
-    // Weitere Eigenschaften zurücksetzen, falls notwendig
+    this.x = this.startX;
+    this.y = this.startY;
   }
 
   isAboveGround() {
@@ -81,7 +80,6 @@ class MovableObject extends DrawableObject {
   }
 
   playAnimation(images, frameDelay = 100) {
-    // frameDelay in Millisekunden
     const now = Date.now();
     if (!this.lastFrameTime || now - this.lastFrameTime > frameDelay) {
       let i = Math.floor(this.currentImage / images.length) % images.length;

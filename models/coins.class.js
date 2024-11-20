@@ -1,7 +1,7 @@
 class Coin extends MovableObject {
   constructor(levelWidth) {
     super();
-    this.loadImage("../img/8_coin/coin_1.png");
+    this.loadImage("./img/8_coin/coin_1.png");
     this.x = 200 + Math.random() * (levelWidth - 200);
     this.y = 100 + Math.random() * 200;
     this.width = 100;

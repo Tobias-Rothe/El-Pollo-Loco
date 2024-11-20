@@ -26,18 +26,6 @@ class StatusBarCoins extends DrawableObject {
     this.img = this.ImageCache[path];
   }
   resolveImageIndex() {
-    if (this.coinsCollected >= 5) {
-      return 5;
-    } else if (this.coinsCollected >= 4) {
-      return 4;
-    } else if (this.coinsCollected >= 3) {
-      return 3;
-    } else if (this.coinsCollected >= 2) {
-      return 2;
-    } else if (this.coinsCollected >= 1) {
-      return 1;
-    } else {
-      return 0;
-    }
+    return Math.min(this.coinsCollected, 5);
   }
 }

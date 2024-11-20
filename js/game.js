@@ -2,212 +2,154 @@ let canvas;
 let world;
 let Keyboard = new KeyBoard();
 
-function init() {
-  canvas = document.getElementById("canvas");
+function initEventListeners() {
+  window.addEventListener("keydown", handleKeyDown);
+  window.addEventListener("keyup", handleKeyUp);
+  window.addEventListener("resize", checkOrientation);
 
+  const btnLeft = document.getElementById("btn-left");
+  const btnRight = document.getElementById("btn-right");
+  const btnJump = document.getElementById("btn-jump");
+  const btnThrow = document.getElementById("btn-throw");
+
+  addTouchListener(
+    btnLeft,
+    () => (Keyboard.LEFT = true),
+    () => (Keyboard.LEFT = false)
+  );
+  addTouchListener(
+    btnRight,
+    () => (Keyboard.RIGHT = true),
+    () => (Keyboard.RIGHT = false)
+  );
+  addTouchListener(
+    btnJump,
+    () => (Keyboard.SPACE = true),
+    () => (Keyboard.SPACE = false)
+  );
+  addTouchListener(
+    btnThrow,
+    () => (Keyboard.D = true),
+    () => (Keyboard.D = false)
+  );
+}
+
+function handleKeyDown(e) {
+  switch (e.keyCode) {
+    case 39:
+      Keyboard.RIGHT = true;
+      break;
+    case 37:
+      Keyboard.LEFT = true;
+      break;
+    case 38:
+      Keyboard.UP = true;
+      break;
+    case 40:
+      Keyboard.DOWN = true;
+      break;
+    case 32:
+      Keyboard.SPACE = true;
+      break;
+    case 68:
+      Keyboard.D = true;
+      break;
+    case 77:
+      Keyboard.M = true;
+      world.toggleMute();
+      break;
+  }
+}
+
+function handleKeyUp(e) {
+  switch (e.keyCode) {
+    case 39:
+      Keyboard.RIGHT = false;
+      break;
+    case 37:
+      Keyboard.LEFT = false;
+      break;
+    case 38:
+      Keyboard.UP = false;
+      break;
+    case 40:
+      Keyboard.DOWN = false;
+      break;
+    case 32:
+      Keyboard.SPACE = false;
+      break;
+    case 68:
+      Keyboard.D = false;
+      break;
+    case 77:
+      Keyboard.M = false;
+      break;
+  }
+}
+
+function addTouchListener(element, onStart, onEnd) {
+  element.addEventListener("touchstart", (e) => {
+    e.preventDefault();
+    onStart();
+  });
+  element.addEventListener("touchend", (e) => {
+    e.preventDefault();
+    onEnd();
+  });
+  element.addEventListener("touchcancel", (e) => {
+    e.preventDefault();
+    onEnd();
+  });
+}
+
+function initCanvas() {
+  canvas = document.getElementById("canvas");
   setCanvasSize(720, 480);
   world = new World(canvas, Keyboard);
-  console.log("Mein Charakter ist", world.character);
 }
-
-window.addEventListener("keydown", (e) => {
-  if (e.keyCode == 39) {
-    Keyboard.RIGHT = true;
-  }
-  if (e.keyCode == 37) {
-    Keyboard.LEFT = true;
-  }
-  if (e.keyCode == 38) {
-    Keyboard.UP = true;
-  }
-  if (e.keyCode == 40) {
-    Keyboard.DOWN = true;
-  }
-  if (e.keyCode == 32) {
-    Keyboard.SPACE = true;
-  }
-  if (e.keyCode == 68) {
-    Keyboard.D = true;
-  }
-  if (e.keyCode == 77) {
-    Keyboard.M = true;
-    world.toggleMute();
-  }
-});
-
-window.addEventListener("keyup", (e) => {
-  if (e.keyCode == 39) {
-    Keyboard.RIGHT = false;
-  }
-  if (e.keyCode == 37) {
-    Keyboard.LEFT = false;
-  }
-  if (e.keyCode == 38) {
-    Keyboard.UP = false;
-  }
-  if (e.keyCode == 40) {
-    Keyboard.DOWN = false;
-  }
-  if (e.keyCode == 32) {
-    Keyboard.SPACE = false;
-  }
-  if (e.keyCode == 68) {
-    Keyboard.D = false;
-  }
-  if (e.keyCode == 77) {
-    Keyboard.M = false;
-  }
-});
 
 function startGame() {
-  // Starte das Spiel: Entferne den Startbildschirm
-  document.getElementById("start-screen").style.display = "none";
-  document.getElementById("controlMenu").style.display = "none"; // Steuerung ausblenden
-  const canvas = document.getElementById("canvas");
-  canvas.style.display = "block";
-
-  init();
+  hideElementById("start-screen");
+  hideElementById("controlMenu");
+  showElementById("canvas", "block");
+  showElementById("mobile-controls", "flex");
+  initCanvas();
 }
 
-document.addEventListener("DOMContentLoaded", function () {
-  const controlButton = document.getElementById("controlButton");
+function reloadPage() {
+  location.reload();
+}
+
+function hideElementById(id) {
+  document.getElementById(id).style.display = "none";
+}
+
+function showElementById(id, displayStyle) {
+  document.getElementById(id).style.display = displayStyle;
+}
+
+function checkOrientation() {
+  const overlay = document.getElementById("orientation-overlay");
+  if (overlay) {
+    const isPortrait = window.innerHeight > window.innerWidth;
+    const isMobile = window.innerWidth <= 500;
+    overlay.style.display = isPortrait && isMobile ? "flex" : "none";
+  }
+}
+
+function setCanvasSize(width, height) {
+  canvas.width = width;
+  canvas.height = height;
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  initEventListeners();
+  checkOrientation();
+  document.getElementById("controlButton").addEventListener("click", toggleControlMenu);
+});
+
+function toggleControlMenu() {
   const controlMenu = document.getElementById("controlMenu");
-
-  // Setze das Steuerungsmenü auf 'ausgeblendet' zu Beginn
-  controlMenu.style.display = "none";
-
-  // Event Listener für den Button
-  if (controlButton) {
-    controlButton.addEventListener("click", function () {
-      // Toggle-Logik für das Steuerungsmenü
-      if (controlMenu.style.display === "none" || controlMenu.style.display === "") {
-        controlMenu.style.display = "block"; // Menü anzeigen
-      } else {
-        controlMenu.style.display = "none"; // Menü ausblenden
-      }
-    });
-  }
-});
-
-function setCanvasSize(width, height) {
-  canvas.width = width;
-  canvas.height = height;
-  canvas.style.width = `${width}px`;
-  canvas.style.height = `${height}px`;
-}
-
-function toggleFullscreen() {
-  const canvasContainer = document.getElementById("canvas-container");
-
-  if (!document.fullscreenElement) {
-    if (canvasContainer.requestFullscreen) {
-      canvasContainer.requestFullscreen();
-    } else if (canvasContainer.mozRequestFullScreen) {
-      canvasContainer.mozRequestFullScreen();
-    } else if (canvasContainer.webkitRequestFullscreen) {
-      canvasContainer.webkitRequestFullscreen();
-    } else if (canvasContainer.msRequestFullscreen) {
-      canvasContainer.msRequestFullscreen();
-    }
-
-    canvas.classList.add("fullscreen");
-    resizeCanvasToFullscreen();
-  } else {
-    if (document.exitFullscreen) {
-      document.exitFullscreen();
-    } else if (document.mozCancelFullScreen) {
-      document.mozCancelFullScreen();
-    } else if (document.webkitExitFullscreen) {
-      document.webkitExitFullscreen();
-    } else if (document.msExitFullscreen) {
-      document.msExitFullscreen();
-    }
-
-    canvas.classList.remove("fullscreen");
-    setCanvasSize(720, 480);
-  }
-}
-
-function resizeCanvasToFullscreen() {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-}
-
-document.addEventListener("fullscreenchange", () => {
-  if (document.fullscreenElement) {
-    resizeCanvasToFullscreen();
-  } else {
-    setCanvasSize(720, 480);
-  }
-});
-
-document.addEventListener("fullscreenchange", () => {
-  if (document.fullscreenElement) {
-    canvas.classList.add("fullscreen");
-  } else {
-    canvas.classList.remove("fullscreen");
-    setCanvasSize(720, 480);
-  }
-});
-
-function setCanvasSize(width, height) {
-  canvas.width = width;
-  canvas.height = height;
-}
-
-document.addEventListener("fullscreenchange", () => {
-  if (document.fullscreenElement) {
-    setCanvasSize(window.innerWidth, window.innerHeight);
-  } else {
-    setCanvasSize(720, 480);
-  }
-});
-
-function setCanvasSize(width, height) {
-  canvas.width = width;
-  canvas.height = height;
-  canvas.style.width = `${width}px`;
-  canvas.style.height = `${height}px`;
-}
-
-document.addEventListener("fullscreenchange", () => {
-  if (document.fullscreenElement) {
-    setCanvasSize(screen.width, screen.height);
-  } else {
-    setCanvasSize(720, 480);
-  }
-});
-
-document.addEventListener("fullscreenchange", () => {
-  if (document.fullscreenElement) {
-    setCanvasSize(window.innerWidth, window.innerHeight);
-  } else {
-    setCanvasSize(720, 480);
-  }
-});
-
-function setCanvasSize(width, height) {
-  canvas.width = width;
-  canvas.height = height;
-}
-
-window.onload = function () {
-  showStartScreen();
-};
-
-function showStartScreen() {
-  const startScreen = document.getElementById("start-screen");
-  const canvas = document.getElementById("canvas");
-  canvas.style.display = "none";
-  startScreen.style.display = "block";
-  const ctx = canvas.getContext("2d");
-  const backgroundImage = new Image();
-  backgroundImage.src = "../img/9_intro_outro_screens/start/startscreen_2.png";
-  backgroundImage.onload = function () {
-    ctx.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height);
-  };
-  ctx.font = "30px Arial";
-  ctx.fillStyle = "white";
-  ctx.fillText("Willkommen zu El Pollo Loco!", 150, 100);
-  ctx.fillText("Klicke auf 'Spiel starten'", 150, 200);
+  controlMenu.style.display =
+    controlMenu.style.display === "none" || controlMenu.style.display === "" ? "block" : "none";
 }

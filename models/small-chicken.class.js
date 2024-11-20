@@ -7,9 +7,9 @@ class SmallChicken extends Chicken {
     this.damage = 5;
 
     this.IMAGES_WALKING = [
-      "../img/3_enemies_chicken/chicken_small/1_walk/1_w.png",
-      "../img/3_enemies_chicken/chicken_small/1_walk/2_w.png",
-      "../img/3_enemies_chicken/chicken_small/1_walk/3_w.png",
+      "./img/3_enemies_chicken/chicken_small/1_walk/1_w.png",
+      "./img/3_enemies_chicken/chicken_small/1_walk/2_w.png",
+      "./img/3_enemies_chicken/chicken_small/1_walk/3_w.png",
     ];
 
     this.loadImage(this.IMAGES_WALKING[0]);
@@ -20,4 +20,11 @@ class SmallChicken extends Chicken {
 
     this.animate();
   }
+  reset() {
+    this.isDead = false;
+    this.x = 0;
+    this.y = 0;
+  }
+
+  update() {}
 }
