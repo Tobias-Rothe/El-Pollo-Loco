@@ -134,7 +134,7 @@ class Character extends MovableObject {
         self.playAnimation(self.IMAGES_HURT, 10);
       } else if (self.isAboveGround()) {
         self.playAnimation(self.IMAGES_JUMPING, 50);
-      } else if (idleTime >= 15000) {
+      } else if (idleTime >= 10000) {
         self.playAnimation(self.IMAGES_SLEEP, 100);
       } else if (!self.isMoving()) {
         self.playAnimation(self.IMAGES_IDLE, 50);
@@ -184,7 +184,6 @@ class Character extends MovableObject {
       this.hurtTime = Date.now();
       n;
       this.playAnimation(this.IMAGES_HURT);
-      console.log(`Kollision! Schaden: ${enemy.damage}, Verbleibende Gesundheit: ${this.health}`);
 
       setTimeout(() => {
         this.isHurt = false;

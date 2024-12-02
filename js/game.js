@@ -113,6 +113,9 @@ function startGame() {
   hideElementById("controlMenu");
   showElementById("canvas", "block");
   showElementById("mobile-controls", "flex");
+  hideElementById("win-screen");
+  hideElementById("game-over-screen");
+
   initCanvas();
 }
 
