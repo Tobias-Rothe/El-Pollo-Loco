@@ -232,6 +232,22 @@ button:hover {
 #mobile-controls button {
   display: none;
 }
+a {
+  position: absolute;
+  top: 93%;
+  left: 51%;
+  transform: translateX(-50%);
+  color: white;
+  padding: 10px 20px;
+  font-size: 50px;
+  cursor: pointer;
+  border: none;
+  font-weight: bold;
+  text-align: center;
+  border-radius: 8px;
+  background-color: black;
+  z-index: 1002;
+}
 
 @media (max-width: 1025px) {
   #mobile-controls {

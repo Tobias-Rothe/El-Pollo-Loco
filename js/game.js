@@ -156,3 +156,14 @@ function toggleControlMenu() {
   controlMenu.style.display =
     controlMenu.style.display === "none" || controlMenu.style.display === "" ? "block" : "none";
 }
+
+function restartGame() {
+  initCanvas();
+
+  hideElementById("start-screen");
+  hideElementById("controlMenu");
+  showElementById("canvas", "block");
+  showElementById("mobile-controls", "flex");
+  hideElementById("win-screen");
+  hideElementById("game-over-screen");
+}

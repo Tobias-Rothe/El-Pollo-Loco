@@ -10,7 +10,6 @@
     <link rel="shortcut icon" href="./img/6_salsa_bottle/salsa_bottle.png" type="image/x-icon" />
     <script src="./models/drawable-object.class.js"></script>
     <script src="./models/movabl-object.class.js"></script>
-
     <script src="./models/character.class.js"></script>
     <script src="./models/chickens.class.js"></script>
     <script src="./models/small-chicken.class.js"></script>
@@ -29,7 +28,6 @@
     <script src="./models/level.class.js"></script>
     <script src="./models/endboss.class.js"></script>
     <script src="./levels/level1.js"></script>
-
     <script src="./js/game.js"></script>
   </head>
   <body>
@@ -38,6 +36,7 @@
 
       <button class="btn" onclick="startGame()">🎮</button>
       <button id="controlButton">⚙️</button>
+      <a href="/imprint.html"></a>
 
       <div id="controlMenu">
         <h2>Steuerung</h2>
@@ -51,14 +50,14 @@
     </div>
     <div id="game-over-screen" style="display: none">
       <h1 class="win">Game Over</h1>
-      <button id="reloadButton" onclick="startGame()">Neustarten</button>
+      <button id="reloadButton" onclick="restartGame()">Neustarten</button>
       <button id="reloadButton" onclick="reloadPage()">Home</button>
     </div>
 
     <div id="win-screen" style="display: none">
       <h1 class="win">You Win!</h1>
       <p>Herzlichen Glückwunsch, du hast den Endboss besiegt!</p>
-      <button id="reloadButton" onclick="startGame()">Nochmal spielen</button>
+      <button id="reloadButton" onclick=" restartGame()">Nochmal spielen</button>
       <button id="reloadButton" onclick="reloadPage()">Home</button>
     </div>
 
@@ -74,6 +73,7 @@
         <button id="btn-throw">🎯</button>
       </div>
     </div>
+
     <div id="orientation-overlay">
       <div class="overlay-content">
         <h2>Bitte drehen Sie Ihr Handy , um das Spiel zu starten.</h2>
