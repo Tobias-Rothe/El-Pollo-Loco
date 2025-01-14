@@ -1,3 +1,11 @@
+/**
+ * Represents a cloud object that extends the MovableObject class.
+ * The cloud object has a fixed position on the y-axis and a random position on the x-axis.
+ * It continuously moves to the left.
+ *
+ * @class Cloud
+ * @extends {MovableObject}
+ */
 class Cloud extends MovableObject {
   y = 10;
   width = 719;

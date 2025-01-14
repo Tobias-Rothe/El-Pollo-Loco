@@ -1,17 +1,64 @@
+/**
+ * Represents the Endboss character in the game. Extends the functionality of MovableObject.
+ */
 class Endboss extends MovableObject {
+  /**
+   * The height of the Endboss.
+   * @type {number}
+   */
   height = 350;
+
+  /**
+   * The width of the Endboss.
+   * @type {number}
+   */
   width = 250;
+
+  /**
+   * The y-coordinate of the Endboss.
+   * @type {number}
+   */
   y = 110;
+
+  /**
+   * The energy level of the Endboss.
+   * @type {number}
+   */
   energy = 100;
+
+  /**
+   * The status bar that displays the Endboss's health.
+   * @type {StatusBarEndboss}
+   */
   statusBar;
+
+  /**
+   * The initial x-coordinate of the Endboss.
+   * @type {number}
+   */
   initialX = 3250;
+
+  /**
+   * The initial y-coordinate of the Endboss.
+   * @type {number}
+   */
   initialY = 110;
+
+  /**
+   * Images for the walking animation.
+   * @type {string[]}
+   */
   IMAGES_WALKING = [
     "./img/4_enemie_boss_chicken/1_walk/G1.png",
     "./img/4_enemie_boss_chicken/1_walk/G2.png",
     "./img/4_enemie_boss_chicken/1_walk/G3.png",
     "./img/4_enemie_boss_chicken/1_walk/G4.png",
   ];
+
+  /**
+   * Images for the attacking animation.
+   * @type {string[]}
+   */
   IMAGES_ATTACKING = [
     "./img/4_enemie_boss_chicken/3_attack/G13.png",
     "./img/4_enemie_boss_chicken/3_attack/G14.png",
@@ -22,11 +69,21 @@ class Endboss extends MovableObject {
     "./img/4_enemie_boss_chicken/3_attack/G19.png",
     "./img/4_enemie_boss_chicken/3_attack/G20.png",
   ];
+
+  /**
+   * Images for the dead animation.
+   * @type {string[]}
+   */
   IMAGES_DEAD = [
     "./img/4_enemie_boss_chicken/5_dead/G24.png",
     "./img/4_enemie_boss_chicken/5_dead/G25.png",
     "./img/4_enemie_boss_chicken/5_dead/G26.png",
   ];
+
+  /**
+   * Images for the alert animation.
+   * @type {string[]}
+   */
   IMAGES_ALERT = [
     "./img/4_enemie_boss_chicken/2_alert/G5.png",
     "./img/4_enemie_boss_chicken/2_alert/G6.png",
@@ -38,6 +95,9 @@ class Endboss extends MovableObject {
     "./img/4_enemie_boss_chicken/2_alert/G12.png",
   ];
 
+  /**
+   * Creates an instance of the Endboss.
+   */
   constructor() {
     super().loadImage(this.IMAGES_WALKING[0]);
     this.loadImages(this.IMAGES_WALKING);
@@ -53,10 +113,16 @@ class Endboss extends MovableObject {
     this.isDefeated = false;
   }
 
+  /**
+   * Marks the Endboss as defeated.
+   */
   defeat() {
     this.isDefeated = true;
   }
 
+  /**
+   * Animates the dead sequence of the Endboss.
+   */
   animateDead() {
     this.isDead = true;
     let deadInterval = setInterval(() => {
@@ -69,6 +135,9 @@ class Endboss extends MovableObject {
     }, 200);
   }
 
+  /**
+   * Animates the walking sequence of the Endboss.
+   */
   animateWalking() {
     setInterval(() => {
       if (!this.isAttacking && !this.isDead && !this.isAlerting) {
@@ -81,6 +150,9 @@ class Endboss extends MovableObject {
     }, 100);
   }
 
+  /**
+   * Animates the attacking sequence of the Endboss.
+   */
   animateAttacking() {
     this.isAttacking = true;
     let attackInterval = setInterval(() => {
@@ -98,14 +170,19 @@ class Endboss extends MovableObject {
       } else {
         this.loadImage(this.IMAGES_ATTACKING[this.attackIndex]);
       }
-    }, 150);
+    }, 100);
   }
 
+  /**
+   * Animates the alert sequence of the Endboss.
+   */
   animateAlert() {
     if (this.isDead) return;
 
     this.isAlerting = true;
-    this.alarmSound.play();
+    if (!isMuted) {
+      this.alarmSound.play();
+    }
     let alertInterval = setInterval(() => {
       this.currentImageIndex++;
       if (this.currentImageIndex >= this.IMAGES_ALERT.length) {
@@ -117,18 +194,43 @@ class Endboss extends MovableObject {
     }, 200);
   }
 
+  /**
+   * Mutes or unmutes the Endboss's alarm sound.
+   * @param {boolean} isMuted - Whether the sound should be muted.
+   */
+  mute(isMuted) {
+    if (this.alarmSound) {
+      this.alarmSound.muted = isMuted;
+      if (isMuted) {
+        this.alarmSound.pause();
+      } else if (this.isAlerting) {
+        this.alarmSound.play();
+      }
+    }
+  }
+
+  /**
+   * Checks the proximity of the player and triggers the alert animation if necessary.
+   * @param {number} playerX - The x-coordinate of the player.
+   */
   checkProximity(playerX) {
     if (Math.abs(this.x - playerX) < 500 && !this.isAlerting && !this.isDead) {
       this.animateAlert();
     }
   }
 
+  /**
+   * Initiates the Endboss's attack sequence.
+   */
   attack() {
     if (!this.isAttacking && !this.isDead) {
       this.animateAttacking();
     }
   }
 
+  /**
+   * Reduces the Endboss's energy when hit and checks if it is dead.
+   */
   hit() {
     this.energy -= 20;
     if (this.energy <= 0) {
@@ -141,12 +243,19 @@ class Endboss extends MovableObject {
     this.statusBar.setPercentage(this.energy);
   }
 
+  /**
+   * Draws the Endboss's status bar on the canvas.
+   * @param {CanvasRenderingContext2D} ctx - The canvas rendering context.
+   */
   drawStatusBar(ctx) {
     this.statusBar.x = this.x + 50;
     this.statusBar.y = this.y - 30;
     this.statusBar.draw(ctx);
   }
 
+  /**
+   * Throws a small chicken during an attack.
+   */
   throwSmallChicken() {
     if (!this.world || !this.world.level) {
       return;
@@ -164,12 +273,9 @@ class Endboss extends MovableObject {
     smallChicken.speedX = -1;
     smallChicken.speedY = 0;
     smallChicken.world = this.world;
-    this.world.level.enemies.push(smallChicken);
-  }
 
-  reset() {
-    this.isDead = false;
-    this.x = 0;
-    this.y = 0;
+    smallChicken.mute(isMuted);
+
+    this.world.level.enemies.push(smallChicken);
   }
 }

@@ -1,11 +1,10 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="style.css" />
     <link rel="stylesheet" href="fonts.css" />
-
     <title>El Pollo Loco</title>
     <link rel="shortcut icon" href="./img/6_salsa_bottle/salsa_bottle.png" type="image/x-icon" />
     <script src="./models/drawable-object.class.js"></script>
@@ -22,6 +21,8 @@
     <script src="./models/coins.class.js"></script>
     <script src="./models/bottle.class.js"></script>
     <script src="./models/thowable-object.class.js"></script>
+    <script src="./models/world.class.sounds.js"></script>
+    <script src="./models/world.class.collisions.js"></script>
     <script src="./models/world.class.js"></script>
     <script src="./models/background.class.js"></script>
     <script src="./models/keyboard.class.js"></script>
@@ -31,52 +32,59 @@
     <script src="./js/game.js"></script>
   </head>
   <body>
-    <div id="start-screen" class="overlay">
+    <div id="start-screen" class="common-screen">
       <div id="background-container"></div>
-
-      <button class="btn" onclick="startGame()">🎮</button>
-      <button id="controlButton">⚙️</button>
-      <a href="/imprint.html"></a>
-
+      <div id="button-row">
+        <button class="btn" onclick="startGame()">Start Game</button>
+        <button id="controlButton">⚙️</button>
+        <a class="a-tag" href="./imprint.html">Imprint</a>
+      </div>
       <div id="controlMenu">
-        <h2>Steuerung</h2>
+        <h2>Controls</h2>
         <ul class="control-menu">
-          <li>Pfeil Rechts - Vorwärts</li>
-          <li>Pfeil Links - Links</li>
+          <li>Right Arrow - Move Forward</li>
+          <li>Left Arrow - Move Back</li>
           <li>M - Mute</li>
-          <li>D - Flasche Werfen</li>
+          <li>D - Throw Bottle</li>
         </ul>
       </div>
     </div>
-    <div id="game-over-screen" style="display: none">
-      <h1 class="win">Game Over</h1>
-      <button id="reloadButton" onclick="restartGame()">Neustarten</button>
+
+    <div id="game-over-screen" class="common-screen" style="display: none">
+      <h2 class="win">Game Over!!</h2>
+      <button id="reloadButton" onclick="restartGame()">Restart</button>
       <button id="reloadButton" onclick="reloadPage()">Home</button>
     </div>
 
-    <div id="win-screen" style="display: none">
-      <h1 class="win">You Win!</h1>
-      <p>Herzlichen Glückwunsch, du hast den Endboss besiegt!</p>
-      <button id="reloadButton" onclick=" restartGame()">Nochmal spielen</button>
+    <div id="win-screen" class="common-screen" style="display: none">
+      <h2 class="win">You Win!</h2>
+      <p class="win-msg">
+        Congratulations,<br />
+        you defeated the final boss!
+      </p>
+      <button id="reloadButton" onclick="restartGame()">Play Again</button>
       <button id="reloadButton" onclick="reloadPage()">Home</button>
     </div>
 
     <div id="canvas-container">
       <h1>El Pollo Loco</h1>
-
-      <canvas id="canvas" style="display: none"> </canvas>
-
+      <button class="button" id="mute-button">Mute</button>
+      <canvas id="canvas" style="display: none"></canvas>
       <div id="mobile-controls">
-        <button id="btn-left">←</button>
-        <button id="btn-jump">⭡</button>
-        <button id="btn-right">→</button>
-        <button id="btn-throw">🎯</button>
+        <div class="flexbox">
+          <button id="btn-left">←</button>
+          <button id="btn-right">→</button>
+        </div>
+        <div class="flexbox">
+          <button class="button" id="btn-jump">⭡</button>
+          <button id="btn-throw">🎯</button>
+        </div>
       </div>
     </div>
 
     <div id="orientation-overlay">
       <div class="overlay-content">
-        <h2>Bitte drehen Sie Ihr Handy , um das Spiel zu starten.</h2>
+        <h2>Please rotate your device to start the game.</h2>
       </div>
     </div>
   </body>

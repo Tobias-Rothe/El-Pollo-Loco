@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: models/statusbar-coins.class.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: models/statusbar-coins.class.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Represents the status bar for coins collected in the game.
+ * Extends the functionality of the DrawableObject class.
+ */
+class StatusBarCoins extends DrawableObject {
+  /**
+   * An array of image paths representing different states of the coin status bar.
+   * @type {string[]}
+   */
+  IMAGES = [
+    "img/7_statusbars/1_statusbar/1_statusbar_coin/orange/0.png",
+    "img/7_statusbars/1_statusbar/1_statusbar_coin/orange/20.png",
+    "img/7_statusbars/1_statusbar/1_statusbar_coin/orange/40.png",
+    "img/7_statusbars/1_statusbar/1_statusbar_coin/orange/60.png",
+    "img/7_statusbars/1_statusbar/1_statusbar_coin/orange/80.png",
+    "img/7_statusbars/1_statusbar/1_statusbar_coin/orange/100.png",
+  ];
+
+  /**
+   * The number of coins currently collected by the player.
+   * @type {number}
+   */
+  coinsCollected = 0;
+
+  /**
+   * Initializes the status bar with default properties and preloads all status bar images.
+   */
+  constructor() {
+    super();
+
+    // Preload all images in the IMAGES array.
+    this.loadImages(this.IMAGES);
+
+    /**
+     * The x-coordinate position of the status bar on the screen.
+     * @type {number}
+     */
+    this.x = 5;
+
+    /**
+     * The y-coordinate position of the status bar on the screen.
+     * @type {number}
+     */
+    this.y = 90;
+
+    /**
+     * The height of the status bar.
+     * @type {number}
+     */
+    this.height = 60;
+
+    /**
+     * The width of the status bar.
+     * @type {number}
+     */
+    this.width = 150;
+
+    // Initialize the status bar with 0 coins collected.
+    this.setCoins(0);
+  }
+
+  /**
+   * Sets the number of coins collected and updates the status bar's appearance.
+   * @param {number} coins - The number of coins collected by the player (up to a maximum of 5).
+   */
+  setCoins(coins) {
+    this.coinsCollected = coins;
+
+    // Update the status bar image based on the number of coins collected.
+    let path = this.IMAGES[this.resolveImageIndex()];
+    this.img = this.ImageCache[path];
+  }
+
+  /**
+   * Resolves the appropriate image index for the current number of coins collected.
+   * @returns {number} The index of the image corresponding to the current number of coins.
+   */
+  resolveImageIndex() {
+    // Ensure the image index does not exceed the maximum value of 5.
+    return Math.min(this.coinsCollected, 5);
+  }
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Namespaces</h3><ul><li><a href="WorldCollisions.html">WorldCollisions</a></li></ul><h3>Classes</h3><ul><li><a href="Background.html">Background</a></li><li><a href="BossSmallChicken.html">BossSmallChicken</a></li><li><a href="Bottle.html">Bottle</a></li><li><a href="Character.html">Character</a></li><li><a href="Chicken.html">Chicken</a></li><li><a href="Cloud.html">Cloud</a></li><li><a href="Coin.html">Coin</a></li><li><a href="DrawableObject.html">DrawableObject</a></li><li><a href="Endboss.html">Endboss</a></li><li><a href="KeyBoard.html">KeyBoard</a></li><li><a href="Level.html">Level</a></li><li><a href="MovableObject.html">MovableObject</a></li><li><a href="SmallChicken.html">SmallChicken</a></li><li><a href="StatusBar.html">StatusBar</a></li><li><a href="StatusBarBottle.html">StatusBarBottle</a></li><li><a href="StatusBarCoins.html">StatusBarCoins</a></li><li><a href="StatusBarEndboss.html">StatusBarEndboss</a></li><li><a href="ThrowableObject.html">ThrowableObject</a></li><li><a href="World.html">World</a></li></ul><h3>Global</h3><ul><li><a href="global.html#WorldSounds">WorldSounds</a></li><li><a href="global.html#addTouchListener">addTouchListener</a></li><li><a href="global.html#checkOrientation">checkOrientation</a></li><li><a href="global.html#createLevel1">createLevel1</a></li><li><a href="global.html#handleKeyDown">handleKeyDown</a></li><li><a href="global.html#handleKeyUp">handleKeyUp</a></li><li><a href="global.html#hideElementById">hideElementById</a></li><li><a href="global.html#initCanvas">initCanvas</a></li><li><a href="global.html#reloadPage">reloadPage</a></li><li><a href="global.html#restartGame">restartGame</a></li><li><a href="global.html#setCanvasSize">setCanvasSize</a></li><li><a href="global.html#showElementById">showElementById</a></li><li><a href="global.html#startGame">startGame</a></li><li><a href="global.html#toggleControlMenu">toggleControlMenu</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Mon Jan 13 2025 15:56:22 GMT+0100 (Mitteleuropäische Normalzeit)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
