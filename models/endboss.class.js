@@ -100,6 +100,9 @@ class Endboss extends MovableObject {
    */
   constructor() {
     super().loadImage(this.IMAGES_WALKING[0]);
+    this.loadImages(this.IMAGES_ATTACKING);
+    this.loadImages(this.IMAGES_DEAD);
+    this.loadImages(this.IMAGES_ALERT);
     this.loadImages(this.IMAGES_WALKING);
     this.alarmSound = new Audio("./audio/enboss.mp3");
     this.x = this.initialX;
@@ -154,11 +157,14 @@ class Endboss extends MovableObject {
    * Animates the attacking sequence of the Endboss.
    */
   animateAttacking() {
+    if (this.isAttacking) return;
+
     this.isAttacking = true;
+    this.attackIndex = 0;
+
     let attackInterval = setInterval(() => {
       this.attackIndex++;
-
-      if (this.attackIndex % 2 === 0) {
+      if (this.attackIndex % 5 === 0) {
         this.throwSmallChicken();
       }
 

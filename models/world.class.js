@@ -57,6 +57,7 @@ class World {
       ...this.getCharacterSounds(),
       ...this.getGameEffectSounds(),
       ...this.getEnemySounds(),
+      click,
     ];
 
     return [...new Set(allSounds)];

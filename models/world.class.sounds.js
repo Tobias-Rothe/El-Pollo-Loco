@@ -17,7 +17,7 @@ const WorldSounds = {
     sound.muted = isMuted;
     if (isMuted) {
       sound.wasPlaying = !sound.paused;
-      sound.pause();
+
       sound.currentTime = 0;
     } else if (sound.wasPlaying) {
       sound.play();
@@ -34,7 +34,6 @@ const WorldSounds = {
     const sounds = world.getAllGameSounds();
     sounds.forEach((sound, index) => {
       if (sound && typeof sound.pause === "function") {
-        sound.pause();
         sound.currentTime = 0;
         sound.removeEventListener("ended", sound.onended);
       }

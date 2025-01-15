@@ -11,6 +11,7 @@ class BossSmallChicken extends SmallChicken {
    * @property {number} x - The initial x-coordinate of the chicken.
    * @property {number} speed - The speed of the chicken.
    */
+
   constructor() {
     super();
     this.width = 40;

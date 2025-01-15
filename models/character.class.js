@@ -165,7 +165,10 @@ class Character extends MovableObject {
         self.playAnimation(self.IMAGES_HURT, 10);
       } else if (self.isAboveGround()) {
         self.playAnimation(self.IMAGES_JUMPING, 10);
-      } else if (idleTime >= 5000) {
+      } else if (
+        idleTime >= 5000 &&
+        this.world.level.enemies.find((enemy) => enemy instanceof Endboss).energy > 0
+      ) {
         this.snore_sound.play();
         self.playAnimation(self.IMAGES_SLEEP, 100);
       } else if (!self.isMoving()) {
@@ -184,7 +187,7 @@ class Character extends MovableObject {
   jump() {
     if (this.y === 200) {
       this.speedY = -30;
-      this.jumping_sound.play();
+      if (!isMuted) this.jumping_sound.play();
     }
   }
 
@@ -207,7 +210,6 @@ class Character extends MovableObject {
         this.x + this.width - 10 > enemy.x && this.x - 10 < enemy.x + enemy.width;
 
       if (isAboveEnemy && isWithinEnemyBounds) {
-        enemy.die();
         this.speedY = -10;
       }
     });

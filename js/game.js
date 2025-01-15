@@ -2,6 +2,27 @@ let canvas;
 let world;
 let Keyboard = new KeyBoard();
 let isMuted = false;
+let click = new Audio("../audio/adriantnt_u_click.mp3");
+
+document.addEventListener("DOMContentLoaded", () => {
+  const muteButton = document.getElementById("mute-button");
+  if (muteButton) {
+    muteButton.addEventListener("click", () => {
+      if (world) {
+        world.toggleMute();
+        updateMuteButtonText();
+      }
+    });
+  }
+});
+
+function updateMuteButtonText() {
+  const muteButton = document.getElementById("mute-button");
+  if (muteButton) {
+    muteButton.textContent = isMuted ? "Unmute" : "Mute";
+  }
+}
+
 function initEventListeners() {
   window.addEventListener("keydown", handleKeyDown);
   window.addEventListener("keyup", handleKeyUp);
@@ -11,21 +32,6 @@ function initEventListeners() {
   const btnRight = document.getElementById("btn-right");
   const btnJump = document.getElementById("btn-jump");
   const btnThrow = document.getElementById("btn-throw");
-
-  const muteButton = document.getElementById("mute-button");
-  if (muteButton) {
-    muteButton.addEventListener("click", () => {
-      world.toggleMute();
-      updateMuteButtonText();
-    });
-  }
-
-  function updateMuteButtonText() {
-    const muteButton = document.getElementById("mute-button");
-    if (muteButton) {
-      muteButton.textContent = isMuted ? "Unmute" : "Mute";
-    }
-  }
 
   /**
    * Adds touch event listeners to the left button.
@@ -112,6 +118,7 @@ function handleKeyDown(e) {
       break;
     case 77:
       Keyboard.M = true;
+      if (!world) return;
       world.toggleMute();
       updateMuteButtonText();
       break;
@@ -211,6 +218,14 @@ function startGame() {
  */
 function reloadPage() {
   location.reload();
+}
+
+function onMouseEnter() {
+  click.play();
+}
+
+function onMouseLeave() {
+  click.pause();
 }
 
 /**
