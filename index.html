@@ -35,54 +35,26 @@
     <div id="start-screen" class="common-screen">
       <div id="background-container"></div>
       <div id="button-row">
-        <button
-          class="btn"
-          onmouseleave="onMouseLeave()"
-          onmouseenter=" onMouseEnter()"
-          onclick="startGame()"
-        >
-          Start Game
-        </button>
-        <button onmouseleave="onMouseLeave()" onmouseenter=" onMouseEnter()" id="controlButton">
-          ⚙️
-        </button>
-        <a
-          onmouseleave="onMouseLeave()"
-          onmouseenter=" onMouseEnter()"
-          class="a-tag"
-          href="./imprint.html"
-          >Imprint</a
-        >
+        <button class="btn" onclick="startGame()">Start Game</button>
+        <button id="controlButton">⚙️</button>
+        <a class="a-tag" href="./imprint.html">Imprint</a>
       </div>
       <div id="controlMenu">
         <h2>Controls</h2>
         <ul class="control-menu">
           <li>Right Arrow - Move Forward</li>
           <li>Left Arrow - Move Back</li>
-          <li>M - Mute</li>
+          <li>Space - Jump</li>
           <li>D - Throw Bottle</li>
+          <li>M - Mute</li>
         </ul>
       </div>
     </div>
 
     <div id="game-over-screen" class="common-screen" style="display: none">
       <h2 class="win">Game Over!!</h2>
-      <button
-        id="reloadButton"
-        onmouseleave="onMouseLeave()"
-        onmouseenter=" onMouseEnter()"
-        onclick="restartGame()"
-      >
-        Restart
-      </button>
-      <button
-        id="reloadButton"
-        onmouseleave="onMouseLeave()"
-        onmouseenter=" onMouseEnter()"
-        onclick="reloadPage()"
-      >
-        Home
-      </button>
+      <button id="reloadButton" onclick="restartGame()">Restart</button>
+      <button id="reloadButton" onclick="reloadPage()">Home</button>
     </div>
 
     <div id="win-screen" class="common-screen" style="display: none">
@@ -91,34 +63,13 @@
         Congratulations,<br />
         you defeated the final boss!
       </p>
-      <button
-        id="reloadButton"
-        onmouseleave="onMouseLeave()"
-        onmouseenter=" onMouseEnter()"
-        onclick="restartGame()"
-      >
-        Play Again
-      </button>
-      <button
-        id="reloadButton"
-        onmouseleave="onMouseLeave()"
-        onmouseenter=" onMouseEnter()"
-        onclick="reloadPage()"
-      >
-        Home
-      </button>
+      <button id="reloadButton" onclick="restartGame()">Play Again</button>
+      <button id="reloadButton" onclick="reloadPage()">Home</button>
     </div>
 
     <div id="canvas-container">
       <h1>El Pollo Loco</h1>
-      <button
-        class="button"
-        onmouseleave="onMouseLeave()"
-        onmouseenter=" onMouseEnter()"
-        id="mute-button"
-      >
-        Mute
-      </button>
+      <button class="button" id="mute-button">Mute</button>
       <canvas id="canvas" style="display: none"></canvas>
       <div id="mobile-controls">
         <div class="flexbox">

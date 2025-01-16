@@ -2,7 +2,6 @@ let canvas;
 let world;
 let Keyboard = new KeyBoard();
 let isMuted = false;
-let click = new Audio("../audio/adriantnt_u_click.mp3");
 
 document.addEventListener("DOMContentLoaded", () => {
   const muteButton = document.getElementById("mute-button");
@@ -218,14 +217,6 @@ function startGame() {
  */
 function reloadPage() {
   location.reload();
-}
-
-function onMouseEnter() {
-  click.play();
-}
-
-function onMouseLeave() {
-  click.pause();
 }
 
 /**

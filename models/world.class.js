@@ -23,6 +23,8 @@ class World {
     this.bottleCollect_sound = new Audio("./audio/bottle.mp3");
     this.bottleThrow_sound = new Audio("./audio/glass-shatter.mp3");
     this.collectCoins_sound = new Audio("./audio/coin.mp3");
+    this.win_sound = new Audio("./audio/8-bit-video-game-win-level-sound-version-1-145827.mp3");
+    this.lose_sound = new Audio("./audio/533034_6299573-lq.mp3");
     this.coins = this.level.coins;
     this.throwableObjects = [];
     this.lastthrowbottle = new Date().getTime();
@@ -57,7 +59,6 @@ class World {
       ...this.getCharacterSounds(),
       ...this.getGameEffectSounds(),
       ...this.getEnemySounds(),
-      click,
     ];
 
     return [...new Set(allSounds)];
@@ -259,6 +260,9 @@ class World {
       document.getElementById("canvas").style.display = "none";
       document.getElementById("mobile-controls").style.display = "none";
     }, 100);
+    setTimeout(() => {
+      this.win_sound.play().volume = 0.1;
+    }, 600);
   }
 
   /**
@@ -279,6 +283,9 @@ class World {
       document.getElementById("canvas").style.display = "none";
       document.getElementById("mobile-controls").style.display = "none";
     }, 200);
+    setTimeout(() => {
+      this.lose_sound.play().volume = 0.1;
+    }, 600);
   }
 
   /**
